@@ -1,5 +1,5 @@
 # GOL
-*GOL* - _Game of Life_ - is a coding project for hands-on practice with programming logic, data structures, and algorithms. 
+**GOL** - _Game of Life_ - is a coding project for hands-on practice with programming logic, data structures, and algorithms. 
 
 The project aims to build a functional version of John Conway's classic cellular automaton, a system that simulates the evolution of cells based on a set of simple rules.
 
