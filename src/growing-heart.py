@@ -126,7 +126,7 @@ def create_animation(matriz_size, steps, output_filename):
 
         ax.set_title(
             f"Step: {step_num}", 
-            fontsize=24, 
+            fontsize=20, 
             fontname='Helvetica',
             pad=20
         )
