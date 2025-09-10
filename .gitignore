@@ -211,6 +211,10 @@ __marimo__/
 
 # Ignorar todos os arquivos dentro da pasta de versões passadas
 gol/src/past_versions/*
+# Mas não ignore o arquivo .gitkeep
+!gol/src/past_versions/.gitkeep
 
 # Ignorar todos os arquivos dentro da pasta de testes de GIFs
 gol/figures/gif/tests/*
+# Mas não ignore o arquivo .gitkeep
+!gol/figures/gif/tests/.gitkeep
