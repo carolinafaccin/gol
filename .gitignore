@@ -208,3 +208,9 @@ __marimo__/
 
 # MacOS
 .DS_Store
+
+# Ignorar todos os arquivos dentro da pasta de versões passadas
+gol/src/past_versions/*
+
+# Ignorar todos os arquivos dentro da pasta de testes de GIFs
+gol/figures/gif/tests/*
