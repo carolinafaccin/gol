@@ -14,14 +14,17 @@ To change this rule, the 'update' method within the 'Game' class was adjusted.
 # Importing necessary libraries
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 import imageio
 import os
 
+# --- Main Game of Life Class ---
 # --- Main Game of Life Class ---
 class Game():
     def __init__(self, linhas, colunas) -> None:
         """
         Initializes the Game of Life board with a single heart pattern in the center.
+        
         Args:
             linhas (int): Number of rows on the board.
             colunas (int): Number of columns on the board.
@@ -29,10 +32,10 @@ class Game():
         self.linhas = linhas
         self.colunas = colunas
         
-        # 1. Start with a completely empty grid (all dead cells)
+        # 1. Start with a completely empty grid (dtype=int is fine for 0s and 1s)
         self.grid = np.zeros((linhas, colunas), dtype=int)
 
-        # 2. Define the heart pattern
+        # 2. Define the heart pattern using 1 for "alive"
         heart_pattern = np.array([
             [0, 1, 1, 0, 1, 1, 0],
             [1, 1, 1, 1, 1, 1, 1],
@@ -76,9 +79,11 @@ class Game():
             2. The birth rule is kept the same (born with 3 neighbors), as it already
                promotes expansion into empty areas.
         """
+
         new_grid = self.grid.copy()
         for i in range(self.linhas):
             for j in range(self.colunas):
+                # The sum now correctly counts neighbors again
                 total_vizinhos = int((
                     self.grid[(i-1) % self.linhas, (j-1) % self.colunas] +
                     self.grid[(i-1) % self.linhas, j % self.colunas] +
@@ -90,12 +95,14 @@ class Game():
                     self.grid[(i+1) % self.linhas, (j+1) % self.colunas]
                 ))
 
-                # Survival Rule: A live cell survives with 2, 3, 4, or 5 neighbors.
-                if self.grid[i, j] == 1 and (total_vizinhos < 2 or total_vizinhos > 4):
-                    new_grid[i, j] = 0 # Dies from loneliness (<2) or extreme overpopulation (>4)
-                # Birth Rule: A dead cell is born with exactly 3 neighbors (same as before).
+
+                # Survival Rule check now uses 1 for "alive"
+                if self.grid[i, j] == 1 and (total_vizinhos < 2 or total_vizinhos > 5):
+                    new_grid[i, j] = 0
+                # Birth Rule sets new cells to 1
                 elif self.grid[i, j] == 0 and total_vizinhos == 3:
                     new_grid[i, j] = 1
+                
         
         self.grid = new_grid
 
@@ -108,9 +115,15 @@ def create_animation(matriz_size, steps, output_filename):
     frames = []
 
     print("Generating frames for the animation...")
+    
     for step_num in range(steps):
         fig, ax = plt.subplots(figsize=(6, 6))
-        ax.imshow(game.grid, cmap='binary')
+
+        # Define as cores: a primeira para o valor 0, a segunda para o valor 1
+        colors = ["white", "#f77877"] # 0 -> white, 1 -> red
+        custom_cmap = mcolors.ListedColormap(colors)
+        ax.imshow(game.grid, cmap=custom_cmap) 
+
         ax.set_title(
             f"Step: {step_num}", 
             fontsize=24, 
@@ -143,7 +156,7 @@ if __name__ == '__main__':
     
     # --- FIXED SIMULATION PARAMETERS ---
     matriz_size = 20
-    total_steps = 21
+    total_steps = 26
     
     print(f"Starting simulation: {matriz_size}x{matriz_size} grid, {total_steps} steps.")
 
