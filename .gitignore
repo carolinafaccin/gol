@@ -209,12 +209,9 @@ __marimo__/
 # MacOS
 .DS_Store
 
-# Ignorar todos os arquivos dentro da pasta de versões passadas
-gol/src/past_versions/*
+# Ignorar todos os arquivos dentro da pasta de testes e versões passadas
+src/past_versions/*
+figures/gif/tests/*
 # Mas não ignore o arquivo .gitkeep
-!gol/src/past_versions/.gitkeep
-
-# Ignorar todos os arquivos dentro da pasta de testes de GIFs
-gol/figures/gif/tests/*
-# Mas não ignore o arquivo .gitkeep
-!gol/figures/gif/tests/.gitkeep
+!src/past_versions/.gitkeep
+!figures/gif/tests/.gitkeep
