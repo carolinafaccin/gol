@@ -117,7 +117,7 @@ def create_animation(matriz_size, steps, output_filename):
     print("Generating frames for the animation...")
     
     for step_num in range(steps):
-        fig, ax = plt.subplots(figsize=(6, 6))
+        fig, ax = plt.subplots(figsize=(3.5, 3.5), dpi=100)
 
         # Define as cores: a primeira para o valor 0, a segunda para o valor 1
         colors = ["white", "#f77877"] # 0 -> white, 1 -> red
@@ -126,9 +126,9 @@ def create_animation(matriz_size, steps, output_filename):
 
         ax.set_title(
             f"Step: {step_num}", 
-            fontsize=20, 
+            fontsize=14, 
             fontname='Helvetica',
-            pad=20
+            pad=10
         )
         ax.set_xticks([])
         ax.set_yticks([])
@@ -148,7 +148,7 @@ def create_animation(matriz_size, steps, output_filename):
         print(f"  - Step {step_num + 1}/{steps} completed.")
 
     print(f"\nSaving animation to '{output_filename}'...")
-    imageio.mimsave(output_filename, frames, fps=10)
+    imageio.mimsave(output_filename, frames, fps=10, loop=0)
     print("Animation saved successfully!")
 
 # --- Main Script Execution ---
@@ -167,7 +167,7 @@ if __name__ == '__main__':
     # Go up one level to the project root directory
     project_root = os.path.dirname(script_dir)
     # Create the path for the output folder
-    output_dir = os.path.join(project_root, 'figures', 'gif')
+    output_dir = os.path.join(project_root, 'figures', 'gif', 'tests')
 
     # Create the directory if it doesn't exist
     os.makedirs(output_dir, exist_ok=True)
