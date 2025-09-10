@@ -13,7 +13,7 @@ Repository structure
 gol/
 ├── src/           # Source code for the Game of Life
 ├── docs/          # Project documentation (e.g., rules, algorithms)
-├── examples/      # Scripts for famous patterns
+├── patterns/      # Scripts for patterns
 ├── .gitignore     # Files to be ignored by Git
 └── README.md      # This file
 ```

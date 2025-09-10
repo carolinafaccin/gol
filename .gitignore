@@ -208,10 +208,9 @@ __marimo__/
 
 # MacOS
 .DS_Store
+venv/
 
-# Ignorar todos os arquivos dentro da pasta de testes e versões passadas
-src/past_versions/*
+# Ignorar todos os arquivos dentro das pastas
+src/tests/*
 figures/gif/tests/*
-# Mas não ignore o arquivo .gitkeep
-!src/past_versions/.gitkeep
 !figures/gif/tests/.gitkeep
