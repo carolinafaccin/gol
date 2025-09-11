@@ -213,5 +213,4 @@ figures/gif/tests/*
 
 # Sphinx documentation
 docs/_build/
-sphinx_source/build/
 .doctrees/
