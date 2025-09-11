@@ -27,6 +27,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 import imageio
+import scipy.signal
 import os
 
 # --- Main Game of Life Class ---
@@ -93,53 +94,58 @@ class Game():
         place_pattern(self.grid, heart_pattern, center_row, center_col)
 
     def update(self) -> None:
-        """
-        Advances the simulation by one generation according to custom rules.
+            """
+            Advances the simulation by one generation according to custom rules.
 
-        This method calculates the number of live neighbors for each cell on the
-        grid and updates its state in a new grid. The rules applied are a
-        variation of Conway's rules designed to promote growth.
+            This method optimizes the calculation of live neighbors using a 2D
+            convolution and applies a modified set of Game of Life rules to the entire
+            grid simultaneously using vectorized NumPy operations. This approach
+            significantly improves performance compared to an iterative loop.
 
-        Standard Rules of Conway's Game of Life:
-            - **Birth (B3):** A dead cell is born if it has exactly 3 live neighbors.
-            - **Survival (S23):** A live cell survives if it has 2 or 3 live neighbors.
+            The custom rules for this simulation are designed to promote continuous
+            growth, preventing cells from dying easily. They are:
 
-        The specific rules are:
-            - **Birth (B3):** A dead cell with exactly 3 live neighbors becomes alive.
-              The birth rule is kept the same as the original rules.
-            - **Survival (S2345):** A live cell with 2, 3, 4, or 5 live neighbors
-              survives to the next generation. All others die.
-              This combats "overpopulation" and encourages larger clusters to form.
-        """
+            * **Survival (S2345):** A live cell survives if it has 2, 3, 4, or 5 live
+                neighbors. This deviates from the standard rule (S23) to prevent
+                overpopulation from killing off cell clusters.
+            * **Birth (B3):** A dead cell becomes a live cell if it has exactly 3
+                live neighbors. This rule remains the same as in the original Game of Life.
 
-        new_grid = self.grid.copy()
-        for i in range(self.rows):
-            for j in range(self.columns):
-                # The sum now correctly counts neighbors again
-                total_vizinhos = int((
-                    self.grid[(i-1) % self.rows, (j-1) % self.columns] +
-                    self.grid[(i-1) % self.rows, j % self.columns] +
-                    self.grid[(i-1) % self.rows, (j+1) % self.columns] +
-                    self.grid[i % self.rows, (j-1) % self.columns] +
-                    self.grid[i % self.rows, (j+1) % self.columns] +
-                    self.grid[(i+1) % self.rows, (j-1) % self.columns] +
-                    self.grid[(i+1) % self.rows, j % self.columns] +
-                    self.grid[(i+1) % self.rows, (j+1) % self.columns]
-                ))
+            The use of a convolutional kernel and bitwise operations allows for a
+            highly efficient, non-iterative update of the entire grid.
+            """
 
+            # Define the 3x3 kernel for the 2D convolution.
+            # This kernel is used to count the 8 surrounding neighbors for each cell.
+            kernel = np.array([[1, 1, 1],
+                            [1, 0, 1],
+                            [1, 1, 1]])
 
-                # Survival Rule check now uses 1 for "alive"
-                if self.grid[i, j] == 1 and (total_vizinhos < 2 or total_vizinhos > 5):
-                    new_grid[i, j] = 0
-                # Birth Rule sets new cells to 1
-                elif self.grid[i, j] == 0 and total_vizinhos == 3:
-                    new_grid[i, j] = 1
-                
-        
-        self.grid = new_grid
+            # Apply 2D convolution to count live neighbors for every cell at once.
+            # The 'mode="same"' parameter ensures the output grid has the same dimensions
+            # as the input. The 'boundary="wrap"' parameter treats the grid's edges as
+            # if they wrap around, creating a toroidal (donut-shaped) surface.
+            total_neighbors = scipy.signal.convolve2d(self.grid, kernel, mode="same", boundary="wrap")
+
+            # Create the new grid based on the rules using vectorized operations.
+            # This approach applies the logic to the entire array at once, which is
+            # much faster than using nested for-loops.
+            new_grid = np.zeros_like(self.grid)
+
+            # Survival Rule: A live cell with 2, 3, 4, or 5 neighbors remains alive.
+            # The '&' operator performs a bitwise AND on the boolean masks.
+            survival_mask = (self.grid == 1) & ((total_neighbors >= 2) & (total_neighbors <= 5))
+            new_grid[survival_mask] = 1
+
+            # Birth Rule: A dead cell with exactly 3 neighbors becomes a live cell.
+            birth_mask = (self.grid == 0) & (total_neighbors == 3)
+            new_grid[birth_mask] = 1
+
+            # Update the main grid with the newly calculated states.
+            self.grid = new_grid
 
 # --- Function to create and save the animation ---
-def create_animation(matriz_size, steps, output_filename):
+def create_animation(grid_size, steps, output_filename):
     """
     Creates and saves an animated GIF of the Game of Life simulation.
 
@@ -149,59 +155,59 @@ def create_animation(matriz_size, steps, output_filename):
     infinitely looping GIF file.
 
     Args:
-        matriz_size (int): The size (width and height) of the square grid.
+        grid_size (int): The size (width and height) of the square grid.
         steps (int): The total number of simulation steps (frames) to generate.
         output_filename (str): The full path and filename for the output GIF.
     """
 
-    game = Game(matriz_size, matriz_size)
-    frames = []
+    game = Game(grid_size, grid_size)
 
     print("Generating frames for the animation...")
-    
-    for step_num in range(steps):
-        fig, ax = plt.subplots(figsize=(3.5, 3.5), dpi=110)
 
-        # Define as cores: a primeira para o valor 0, a segunda para o valor 1
-        colors = ["white", "#f77877"] # 0 -> white, 1 -> red
-        custom_cmap = mcolors.ListedColormap(colors)
-        ax.imshow(game.grid, cmap=custom_cmap) 
+    # Use the writer's context to ensure the file is closed properly
+    with imageio.get_writer(output_filename, mode='I', fps=10, loop=0) as writer:
+        for step_num in range(steps):
+            fig, ax = plt.subplots(figsize=(3.5, 3.5), dpi=110)
 
-        ax.set_title(
-            f"Step: {step_num}", 
-            fontsize=14, 
-            fontname='Helvetica',
-            pad=10
-        )
-        ax.set_xticks([])
-        ax.set_yticks([])
+            colors = ["white", "#f77877"]
+            custom_cmap = mcolors.ListedColormap(colors)
+            ax.imshow(game.grid, cmap=custom_cmap)
 
-        fig.canvas.draw()
+            ax.set_title(
+                f"Step: {step_num}",
+                fontsize=14,
+                fontname='Helvetica',
+                pad=10
+            )
+            ax.set_xticks([])
+            ax.set_yticks([])
 
-        width_float, height_float = fig.canvas.renderer.get_canvas_width_height()
-        width = int(width_float)
-        height = int(height_float)
-        
-        buffer = fig.canvas.tostring_argb()
-        image_rgba = np.frombuffer(buffer, dtype='uint8').reshape(height, width, 4)
-        frames.append(image_rgba[:, :, 1:].copy()) # Get the R, G, B channels, ignoring Alpha
+            fig.canvas.draw()
+            
+            width_float, height_float = fig.canvas.renderer.get_canvas_width_height()
+            width = int(width_float)
+            height = int(height_float)
 
-        plt.close(fig)
-        game.update()
-        print(f"  - Step {step_num + 1}/{steps} completed.")
+            buffer = fig.canvas.tostring_argb()
+            image_rgba = np.frombuffer(buffer, dtype='uint8').reshape(height, width, 4)
+            
+            # Add the frame directly to the writer, saving memory
+            writer.append_data(image_rgba[:, :, 1:].copy())
 
-    print(f"\nSaving animation to '{output_filename}'...")
-    imageio.mimsave(output_filename, frames, fps=10, loop=0)
-    print("Animation saved successfully!")
+            plt.close(fig)
+            game.update()
+            print(f"  - Step {step_num + 1}/{steps} completed.")
+
+    print(f"\nAnimation saved successfully to '{output_filename}'!")
 
 # --- Main Script Execution ---
 if __name__ == '__main__':
     
     # --- FIXED SIMULATION PARAMETERS ---
-    matriz_size = 20
-    total_steps = 26
+    matrix_size = 40
+    total_steps = 41
     
-    print(f"Starting simulation: {matriz_size}x{matriz_size} grid, {total_steps} steps.")
+    print(f"Starting simulation: {matrix_size}x{matrix_size} grid, {total_steps} steps.")
 
     # --- Logic to create folder and filename ---
 
@@ -234,4 +240,4 @@ if __name__ == '__main__':
         version += 1 # If it exists, try the next version
     
     # Call the main function with the fixed values and the versioned path
-    create_animation(matriz_size, total_steps, full_path)
+    create_animation(matrix_size, total_steps, full_path)
