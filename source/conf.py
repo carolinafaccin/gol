@@ -36,3 +36,5 @@ exclude_patterns = []
 
 html_theme = 'shibuya'
 html_static_path = ['_static']
+
+html_baseurl = 'https://carolinafaccin.github.io/gol/'
