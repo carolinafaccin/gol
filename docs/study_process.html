@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="./">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Study Process Documentation - GOL 0.0.1 documentation</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Code Documentation" href="modules.html" /><link rel="prev" title="GOL documentation" href="index.html" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="_static/pygments.css?v=397bb51e" />
+    <link rel="stylesheet" type="text/css" href="_static/shibuya.css?v=d48c410d" />
+    <link media="print" rel="stylesheet" type="text/css" href="_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Study Process Documentation"/>
+<meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="index.html">
+      
+      
+      <strong>GOL</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2 -translate-x-2"></span>
+          <span class="hamburger_3 -translate-x-1"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Project Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Study Process Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Code Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#example-1-saw-game-of-life-by-santos-2023">Example 1: SAW - Game of Life by Santos (2023)</a></li>
+<li><a class="reference internal" href="#experiment-1-simulating-growth-only-rules">Experiment 1: Simulating &#8220;Growth-Only&#8221; Rules</a></li>
+<li><a class="reference internal" href="#experiment-2-implementing-custom-colors">Experiment 2: Implementing Custom Colors</a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="index.html"><span itemprop="name">GOL</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">Study Process Documentation</strong>
+        <meta itemprop="position" content="2" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+        <article class="yue" role="main">
+          <section id="study-process-documentation">
+<h1>Study Process Documentation<a class="headerlink" href="#study-process-documentation" title="Link to this heading">¶</a></h1>
+<p>This document logs the experiments and modifications made during the development of the Game of Life project.
+Each entry details a specific change, the reasoning behind it, and the result.</p>
+<hr class="docutils" />
+<section id="example-1-saw-game-of-life-by-santos-2023">
+<h2>Example 1: SAW - Game of Life by Santos (2023)<a class="headerlink" href="#example-1-saw-game-of-life-by-santos-2023" title="Link to this heading">¶</a></h2>
+<p>Implementation of Game of Life in Python, as developed by Santos (2023).</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://c137santos.medium.com/a-implementa%C3%A7%C3%A3o-do-game-of-life-em-python-3c2da1536957">Article on Medium</a></p></li>
+<li><p><a class="reference external" href="https://github.com/c137santos/saw">Repo on GitHub</a></p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="experiment-1-simulating-growth-only-rules">
+<h2>Experiment 1: Simulating “Growth-Only” Rules<a class="headerlink" href="#experiment-1-simulating-growth-only-rules" title="Link to this heading">¶</a></h2>
+<p><strong>Hypothesis</strong></p>
+<p>The standard Game of Life rules include conditions for cells to die.
+What if the system only allowed for growth, similar to a simple urban expansion model?
+This would require removing the rules for cell death due to loneliness or overpopulation.</p>
+<p><strong>Modification</strong></p>
+<p>The change was implemented in the <code class="docutils literal notranslate"><span class="pre">update</span></code> method of the <code class="docutils literal notranslate"><span class="pre">Game</span></code> class.
+The original <code class="docutils literal notranslate"><span class="pre">if/elif</span></code> block that checked for both survival and birth was replaced
+with a single <code class="docutils literal notranslate"><span class="pre">if</span></code> statement that only implements the birth rule.</p>
+<p><em>Before (Standard Rules):</em></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># A live cell is checked for survival conditions</span>
+</span><span data-line="2"><span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="p">(</span><span class="n">total_vizinhos</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">total_vizinhos</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">):</span>
+</span><span data-line="3">    <span class="n">new_grid</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># The cell dies</span>
+</span><span data-line="4"><span class="c1"># A dead cell is checked for birth conditions</span>
+</span><span data-line="5"><span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">total_vizinhos</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+</span><span data-line="6">    <span class="n">new_grid</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+</span></pre></div>
+</div>
+<p><em>After (Growth-Only Rule):</em></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Only the birth rule is checked.</span>
+</span><span data-line="2"><span class="c1"># If a cell is already alive, it is not affected and remains alive.</span>
+</span><span data-line="3"><span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">total_vizinhos</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+</span><span data-line="4">    <span class="n">new_grid</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+</span></pre></div>
+</div>
+<p><strong>Result</strong></p>
+<p>The simulation now exhibits a “growth-only” behavior. Once a cell becomes “alive,”
+it never reverts to “dead.” New cells are born on the edges of existing
+clusters according to the birth rule, causing the initial pattern to expand
+indefinitely without ever shrinking.</p>
+</section>
+<hr class="docutils" />
+<section id="experiment-2-implementing-custom-colors">
+<h2>Experiment 2: Implementing Custom Colors<a class="headerlink" href="#experiment-2-implementing-custom-colors" title="Link to this heading">¶</a></h2>
+<p><strong>Hypothesis</strong></p>
+<p>The default black-and-white (<code class="docutils literal notranslate"><span class="pre">cmap='binary'</span></code>) visualization is classic,
+but custom colors could make the simulation more visually appealing.
+The goal was to change the “alive” cells from black to a specific shade
+of red on a white background.</p>
+<p><strong>Modification</strong></p>
+<p>This required separating the simulation <strong>logic</strong> (which works best with <code class="docutils literal notranslate"><span class="pre">0</span></code>
+for dead and <code class="docutils literal notranslate"><span class="pre">1</span></code> for alive) from the <strong>visualization</strong>.</p>
+<ol class="arabic simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Game</span></code> class was reverted to use <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code> for its internal grid state.</p></li>
+</ol>
+<p>2. In the <code class="docutils literal notranslate"><span class="pre">create_animation</span></code> function, a <code class="docutils literal notranslate"><span class="pre">ListedColormap</span></code> from
+<code class="docutils literal notranslate"><span class="pre">matplotlib.colors</span></code> was used. A two-color map was defined: <code class="docutils literal notranslate"><span class="pre">[&quot;white&quot;,</span> <span class="pre">&quot;#f77877&quot;]</span></code>.
+3. The <code class="docutils literal notranslate"><span class="pre">ax.imshow()</span></code> call was updated to use this custom colormap.
+Matplotlib automatically maps the grid’s <code class="docutils literal notranslate"><span class="pre">0</span></code> values to the first color
+(white) and <code class="docutils literal notranslate"><span class="pre">1</span></code> values to the second color (red).</p>
+<p><em>Code Snippet (``create_animation`` function):</em></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Define the colors: the first for value 0, the second for value 1</span>
+</span><span data-line="2"><span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="s2">&quot;#f77877&quot;</span><span class="p">]</span> <span class="c1"># 0 -&gt; white, 1 -&gt; red</span>
+</span><span data-line="3"><span class="n">custom_cmap</span> <span class="o">=</span> <span class="n">mcolors</span><span class="o">.</span><span class="n">ListedColormap</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
+</span><span data-line="4">
+</span><span data-line="5"><span class="c1"># Pass the grid with 0s and 1s. The colormap handles the color translation.</span>
+</span><span data-line="6"><span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">custom_cmap</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<p><strong>Result</strong></p>
+<p>The final <code class="docutils literal notranslate"><span class="pre">.gif</span></code> now correctly displays the simulation with a white
+background and red cells, as intended. This approach cleanly separates
+the model’s data from its visual representation.</p>
+</section>
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="index.html">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">Home</div></div>
+    </a>
+  </div><div class="navigation-next">
+    <a href="modules.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Code Documentation</div>
+      </div>
+      <i class="i-lucide chevron-right"></i>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Carolina Faccin</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/shibuya.js?v=e730760c"></script></body>
+</html>

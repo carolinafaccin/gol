@@ -8,9 +8,9 @@ The project aims to build a functional version of John Conway's classic cellular
 - Visualize the simulation: Create a visual representation of the grid and its evolution over time.
 - Explore different patterns: Experiment with famous initial patterns like the Glider, Lightweight Spaceship, and Gosper Glider Gun.
 
-Example output from the `growing-heart.py` script:
+Example output from the `growingheart.py` script:
 
-<img src="https://raw.githubusercontent.com/carolinafaccin/gol/main/figures/gif/growing-heart_intro.gif?raw=true" alt="Animated GIF of a growing heart pattern" width="350">
+<img src="https://raw.githubusercontent.com/carolinafaccin/gol/main/figures/gif/growingheart_intro1.gif?raw=true" alt="Animated GIF of a growing heart pattern" width="350">
 
 
 ## Repository structure
