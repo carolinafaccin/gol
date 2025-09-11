@@ -201,13 +201,20 @@ def create_animation(grid_size, steps, output_filename):
     print(f"\nAnimation saved successfully to '{output_filename}'!")
 
 # --- Main Script Execution ---
+# --- Main Script Execution ---
 if __name__ == '__main__':
     
-    # --- FIXED SIMULATION PARAMETERS ---
-    matrix_size = 40
-    total_steps = 41
-    
-    print(f"Starting simulation: {matrix_size}x{matrix_size} grid, {total_steps} steps.")
+    # --- GET SIMULATION PARAMETERS FROM USER INPUT ---
+    # Ask for the grid size and convert the input to an integer
+    try:
+        matrix_size = int(input("Enter the grid size (e.g., 40): "))
+        total_steps = int(input("Enter the number of simulation steps (e.g., 50): "))
+    except ValueError:
+        print("Invalid input. Please enter a valid integer.")
+        # Exit the script or set default values if the input is not a number
+        matrix_size = 40
+        total_steps = 41
+        print(f"Using default values: grid size = {matrix_size}, steps = {total_steps}")
 
     # --- Logic to create folder and filename ---
 
