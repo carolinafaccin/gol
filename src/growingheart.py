@@ -29,6 +29,7 @@ import matplotlib.colors as mcolors
 import imageio
 import scipy.signal
 import os
+from tqdm import tqdm
 
 # --- Main Game of Life Class ---
 # --- Main Game of Life Class ---
@@ -166,7 +167,8 @@ def create_animation(grid_size, steps, output_filename):
 
     # Use the writer's context to ensure the file is closed properly
     with imageio.get_writer(output_filename, mode='I', fps=10, loop=0) as writer:
-        for step_num in range(steps):
+        # Wrap the range() function with tqdm() to create a progress bar
+        for step_num in tqdm(range(steps), desc="Generating frames"):
             fig, ax = plt.subplots(figsize=(3.5, 3.5), dpi=110)
 
             colors = ["white", "#f77877"]
@@ -196,7 +198,8 @@ def create_animation(grid_size, steps, output_filename):
 
             plt.close(fig)
             game.update()
-            print(f"  - Step {step_num + 1}/{steps} completed.")
+            # Remove the old print statement, as tqdm handles progress display
+            # print(f"  - Step {step_num + 1}/{steps} completed.")
 
     print(f"\nAnimation saved successfully to '{output_filename}'!")
 
