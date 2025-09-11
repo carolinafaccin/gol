@@ -68,9 +68,6 @@ instance/
 # Scrapy stuff:
 .scrapy
 
-# Sphinx documentation
-docs/_build/
-
 # PyBuilder
 .pybuilder/
 target/
@@ -208,9 +205,13 @@ __marimo__/
 
 # MacOS
 .DS_Store
-venv/
 
-# Ignorar todos os arquivos dentro das pastas
+# Ignore files and folders
 src/tests/*
 figures/gif/tests/*
 !figures/gif/tests/.gitkeep
+
+# Sphinx documentation
+docs/_build/
+sphinx_source/build/
+.doctrees/
