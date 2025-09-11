@@ -3,11 +3,7 @@
 
 The project aims to build a functional version of John Conway's classic cellular automaton, a system that simulates the evolution of cells based on a set of simple rules.
 
-## Documentation
-
-The complete project documentation, including the study process and API reference, is available online.
-
-- **[Click here to view the full documentation](https://carolinafaccin.github.io/gol/)**
+[![Documentation](https://img.shields.io/badge/docs-read%20the%20documentation-brightgreen)](https://carolinafaccin.github.io/gol/)
 
 ## Project Goals
 - Implement core logic: Develop the rules for a two-dimensional grid based on Conway's four rules.
@@ -24,9 +20,10 @@ Example output from the `growingheart.py` script:
 ## Repository structure
 ```
 gol/
-├── src/           # Source code for the Game of Life
-├── figures/       # Figures generated
-├── docs/          # Project documentation (e.g., rules, algorithms)
-├── patterns/      # Scripts for patterns
-└── README.md      # This file
+├── src/            # Source code for the Game of Life
+├── figures/        # Figures and animations generated
+├── sphinx_source/  # Source files for the documentation (.rst)
+├── docs/           # Final HTML output for GitHub Pages
+├── patterns/       # Scripts for different patterns
+└── README.md       # This file
 ```
