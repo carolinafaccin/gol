@@ -41,9 +41,9 @@ class Game():
     advance the simulation to the next generation.
     """
 
-    def __init__(self, rows, columns) -> None:
+    def __init__(self, rows, columns, survival_rules=[2, 3, 4, 5], birth_rules=[3]) -> None:
         """
-        Initializes the Game of Life board.
+        Initializes the Game of Life board with configurable rules.
 
         Sets up an empty grid of a given size and places a single, 
         predefined heart-shaped pattern in the center.
@@ -51,16 +51,22 @@ class Game():
         Args:
             rows (int): The number of rows for the simulation grid.
             columns (int): The number of columns for the simulation grid.
+            survival_rules (list[int]): A list of neighbor counts for a live cell to survive.
+            birth_rules (list[int]): A list of neighbor counts for a dead cell to be born.
         
         Attributes:
             rows (int): Stores the number of rows.
             columns (int): Stores the number of columns.
             grid (np.ndarray): A 2D NumPy array representing the cell states
                 (0 for dead, 1 for alive).
+            survival_rules (list[int]): Stores the survival rules.
+            birth_rules (list[int]): Stores the birth rules.
         """
         
         self.rows = rows
         self.columns = columns
+        self.survival_rules = survival_rules
+        self.birth_rules = birth_rules
         
         # 1. Start with a completely empty grid (dtype=int is fine for 0s and 1s)
         self.grid = np.zeros((rows, columns), dtype=int)
@@ -87,66 +93,58 @@ class Game():
                (start_col + pattern_width) <= grid.shape[1]:
                 grid[start_row : start_row + pattern_height, start_col : start_col + pattern_width] = pattern
         
-        # 3. Calculate the center of the grid
+        # 3. Calculate the cent≤er of the grid
         center_row = self.rows // 2
         center_col = self.columns // 2
 
         # 4. Place the heart pattern in the center of the grid
         place_pattern(self.grid, heart_pattern, center_row, center_col)
-
+    
     def update(self) -> None:
-            """
-            Advances the simulation by one generation according to custom rules.
+        """
+        Advances the simulation by one generation according to configurable rules.
 
-            This method optimizes the calculation of live neighbors using a 2D
-            convolution and applies a modified set of Game of Life rules to the entire
-            grid simultaneously using vectorized NumPy operations. This approach
-            significantly improves performance compared to an iterative loop.
+        This method calculates the number of live neighbors for each cell on the
+        grid using a highly optimized 2D convolution from the SciPy library. It
+        then applies the rules defined in the `survival_rules` and `birth_rules`
+        attributes of the class to the entire grid using efficient vectorized
+        NumPy operations.
 
-            The custom rules for this simulation are designed to promote continuous
-            growth, preventing cells from dying easily. They are:
+        This approach replaces the slower nested for-loops, making the simulation
+        significantly more performant, especially for larger grids. The use of
+        configurable rules allows the same code to simulate different "universes"
+        or rule sets (e.g., standard Conway's Life, HighLife, Day & Night) by
+        simply passing different lists during initialization.
 
-            * **Survival (S2345):** A live cell survives if it has 2, 3, 4, or 5 live
-                neighbors. This deviates from the standard rule (S23) to prevent
-                overpopulation from killing off cell clusters.
-            * **Birth (B3):** A dead cell becomes a live cell if it has exactly 3
-                live neighbors. This rule remains the same as in the original Game of Life.
+        The core logic is as follows:
+        - A dead cell becomes alive if its neighbor count is in `self.birth_rules`.
+        - A live cell survives if its neighbor count is in `self.survival_rules`.
+        - All other cells die or remain dead.
+        """
 
-            The use of a convolutional kernel and bitwise operations allows for a
-            highly efficient, non-iterative update of the entire grid.
-            """
+        # Define the 3x3 kernel for the 2D convolution.
+        kernel = np.array([[1, 1, 1],
+                        [1, 0, 1],
+                        [1, 1, 1]])
 
-            # Define the 3x3 kernel for the 2D convolution.
-            # This kernel is used to count the 8 surrounding neighbors for each cell.
-            kernel = np.array([[1, 1, 1],
-                            [1, 0, 1],
-                            [1, 1, 1]])
+        # Apply 2D convolution to count live neighbors for every cell at once.
+        total_neighbors = scipy.signal.convolve2d(self.grid, kernel, mode="same", boundary="wrap")
 
-            # Apply 2D convolution to count live neighbors for every cell at once.
-            # The 'mode="same"' parameter ensures the output grid has the same dimensions
-            # as the input. The 'boundary="wrap"' parameter treats the grid's edges as
-            # if they wrap around, creating a toroidal (donut-shaped) surface.
-            total_neighbors = scipy.signal.convolve2d(self.grid, kernel, mode="same", boundary="wrap")
+        # Create the new grid based on the rules using vectorized operations.
+        new_grid = np.zeros_like(self.grid)
 
-            # Create the new grid based on the rules using vectorized operations.
-            # This approach applies the logic to the entire array at once, which is
-            # much faster than using nested for-loops.
-            new_grid = np.zeros_like(self.grid)
+        # Survival Rule: A live cell survives if its neighbor count is in the survival_rules list.
+        survival_mask = (self.grid == 1) & (np.isin(total_neighbors, self.survival_rules))
+        new_grid[survival_mask] = 1
 
-            # Survival Rule: A live cell with 2, 3, 4, or 5 neighbors remains alive.
-            # The '&' operator performs a bitwise AND on the boolean masks.
-            survival_mask = (self.grid == 1) & ((total_neighbors >= 2) & (total_neighbors <= 5))
-            new_grid[survival_mask] = 1
+        # Birth Rule: A dead cell is born if its neighbor count is in the birth_rules list.
+        birth_mask = (self.grid == 0) & (np.isin(total_neighbors, self.birth_rules))
+        new_grid[birth_mask] = 1
 
-            # Birth Rule: A dead cell with exactly 3 neighbors becomes a live cell.
-            birth_mask = (self.grid == 0) & (total_neighbors == 3)
-            new_grid[birth_mask] = 1
-
-            # Update the main grid with the newly calculated states.
-            self.grid = new_grid
+        self.grid = new_grid
 
 # --- Function to create and save the animation ---
-def create_animation(grid_size, steps, output_filename):
+def create_animation(grid_size, steps, output_filename, survival_rules, birth_rules):
     """
     Creates and saves an animated GIF of the Game of Life simulation.
 
@@ -161,7 +159,8 @@ def create_animation(grid_size, steps, output_filename):
         output_filename (str): The full path and filename for the output GIF.
     """
 
-    game = Game(grid_size, grid_size)
+    # Pass the rules to the Game class
+    game = Game(grid_size, grid_size, survival_rules=survival_rules, birth_rules=birth_rules)
 
     print("Generating frames for the animation...")
 
@@ -218,6 +217,10 @@ if __name__ == '__main__':
         matrix_size = 40
         total_steps = 41
         print(f"Using default values: grid size = {matrix_size}, steps = {total_steps}")
+    
+    # Define the rules for the custom simulation
+    current_survival_rules = [2, 3, 4, 5]
+    current_birth_rules = [3]
 
     # --- Logic to create folder and filename ---
 
@@ -249,5 +252,5 @@ if __name__ == '__main__':
             break # If it doesn't exist, we've found the right name and exit the loop
         version += 1 # If it exists, try the next version
     
-    # Call the main function with the fixed values and the versioned path
-    create_animation(matrix_size, total_steps, full_path)
+    # Call the main function with the user's values and the versioned path
+    create_animation(matrix_size, total_steps, full_path, current_survival_rules, current_birth_rules)

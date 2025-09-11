@@ -93,3 +93,17 @@ This final version improves the user experience by providing real-time feedback 
 Key changes from V.1.0.3:
 
 * **Progress Bar:** The `tqdm` library was integrated to add a dynamic progress bar to the frame generation loop. This simple change provides a clear visual indicator of the simulation's status, showing the percentage completed and the estimated time remaining, a significant improvement over simple print statements.
+
+---
+
+v1.0.5 - Making Rules Configurable
+----------------------------------
+
+This version introduces a significant improvement in the code's flexibility by making the simulation rules dynamic rather than hardcoded. This allows the same code to run different types of cellular automata without manual modification.
+
+Key changes from V.1.0.4:
+
+* **Configurable Rules:** The `__init__` method of the `Game` class was updated to accept `survival_rules` and `birth_rules` as parameters. These lists of integers define the number of neighbors a cell needs to survive or be born, respectively.
+* **Vectorized Rule Application:** The `update` method now uses the NumPy function `np.isin()` to check if a cell's neighbor count is included in the provided rule lists. This vectorized approach replaces the static conditional checks with a flexible, data-driven method, maintaining the high performance achieved in previous versions.
+* **Extensibility:** This change allows for easy experimentation with different rule sets, such as the standard B3/S23 (Conway's) rules or other well-known variations like HighLife (B36/S23) or Day & Night (B3678/S34678), simply by changing the parameters passed to the `Game` class.
+
