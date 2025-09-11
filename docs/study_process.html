@@ -70,9 +70,14 @@ data-aria-dark="Switch to auto color mode">
       <i class="i-lucide close"></i>
     </button>
     <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
-<li><a class="reference internal" href="#example-1-saw-game-of-life-by-santos-2023">Example 1: SAW - Game of Life by Santos (2023)</a></li>
-<li><a class="reference internal" href="#experiment-1-simulating-growth-only-rules">Experiment 1: Simulating &#8220;Growth-Only&#8221; Rules</a></li>
-<li><a class="reference internal" href="#experiment-2-implementing-custom-colors">Experiment 2: Implementing Custom Colors</a></li>
+<li><a class="reference internal" href="#v-0-0-0-initial-prototype-based-on-santos-2023">V.0.0.0 - Initial Prototype based on Santos (2023)</a></li>
+<li><a class="reference internal" href="#v-0-0-1-refactoring-with-numpy-and-matplotlib">V.0.0.1 - Refactoring with NumPy and Matplotlib</a></li>
+<li><a class="reference internal" href="#v-0-0-2-custom-patterns-and-rules">V.0.0.2 - Custom Patterns and Rules</a></li>
+<li><a class="reference internal" href="#v-1-0-0-a-single-growing-heart">V.1.0.0 - A Single, Growing Heart</a></li>
+<li><a class="reference internal" href="#v-1-0-1-improved-visualization-and-code-structure">V.1.0.1 - Improved Visualization and Code Structure</a></li>
+<li><a class="reference internal" href="#v-1-0-2-performance-optimization-with-scipy-signal-convolve2d">V.1.0.2 - Performance Optimization with <cite>scipy.signal.convolve2d</cite></a></li>
+<li><a class="reference internal" href="#v-1-0-3-parameter-inputs-and-error-handling">V.1.0.3 - Parameter Inputs and Error Handling</a></li>
+<li><a class="reference internal" href="#v-1-0-4-adding-a-visual-progress-bar">V.1.0.4 - Adding a Visual Progress Bar</a></li>
 </ul>
 </div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
   </aside>
@@ -107,80 +112,85 @@ data-aria-dark="Switch to auto color mode">
 <h1>Study Process Documentation<a class="headerlink" href="#study-process-documentation" title="Link to this heading">¶</a></h1>
 <p>This document logs the experiments and modifications made during the development of the Game of Life project.
 Each entry details a specific change, the reasoning behind it, and the result.</p>
-<hr class="docutils" />
-<section id="example-1-saw-game-of-life-by-santos-2023">
-<h2>Example 1: SAW - Game of Life by Santos (2023)<a class="headerlink" href="#example-1-saw-game-of-life-by-santos-2023" title="Link to this heading">¶</a></h2>
-<p>Implementation of Game of Life in Python, as developed by Santos (2023).</p>
+<p>—</p>
+<section id="v-0-0-0-initial-prototype-based-on-santos-2023">
+<h2>V.0.0.0 - Initial Prototype based on Santos (2023)<a class="headerlink" href="#v-0-0-0-initial-prototype-based-on-santos-2023" title="Link to this heading">¶</a></h2>
+<p>This is the original implementation of the Game of Life as created by Santos (2023). It uses standard Python lists and basic loops to simulate the game, printing the grid to the console with ASCII characters.</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://c137santos.medium.com/a-implementa%C3%A7%C3%A3o-do-game-of-life-em-python-3c2da1536957">Article on Medium</a></p></li>
 <li><p><a class="reference external" href="https://github.com/c137santos/saw">Repo on GitHub</a></p></li>
 </ul>
+<p>—</p>
 </section>
-<hr class="docutils" />
-<section id="experiment-1-simulating-growth-only-rules">
-<h2>Experiment 1: Simulating “Growth-Only” Rules<a class="headerlink" href="#experiment-1-simulating-growth-only-rules" title="Link to this heading">¶</a></h2>
-<p><strong>Hypothesis</strong></p>
-<p>The standard Game of Life rules include conditions for cells to die.
-What if the system only allowed for growth, similar to a simple urban expansion model?
-This would require removing the rules for cell death due to loneliness or overpopulation.</p>
-<p><strong>Modification</strong></p>
-<p>The change was implemented in the <code class="docutils literal notranslate"><span class="pre">update</span></code> method of the <code class="docutils literal notranslate"><span class="pre">Game</span></code> class.
-The original <code class="docutils literal notranslate"><span class="pre">if/elif</span></code> block that checked for both survival and birth was replaced
-with a single <code class="docutils literal notranslate"><span class="pre">if</span></code> statement that only implements the birth rule.</p>
-<p><em>Before (Standard Rules):</em></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># A live cell is checked for survival conditions</span>
-</span><span data-line="2"><span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="p">(</span><span class="n">total_vizinhos</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">total_vizinhos</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">):</span>
-</span><span data-line="3">    <span class="n">new_grid</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># The cell dies</span>
-</span><span data-line="4"><span class="c1"># A dead cell is checked for birth conditions</span>
-</span><span data-line="5"><span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">total_vizinhos</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-</span><span data-line="6">    <span class="n">new_grid</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-</span></pre></div>
-</div>
-<p><em>After (Growth-Only Rule):</em></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Only the birth rule is checked.</span>
-</span><span data-line="2"><span class="c1"># If a cell is already alive, it is not affected and remains alive.</span>
-</span><span data-line="3"><span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">total_vizinhos</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-</span><span data-line="4">    <span class="n">new_grid</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-</span></pre></div>
-</div>
-<p><strong>Result</strong></p>
-<p>The simulation now exhibits a “growth-only” behavior. Once a cell becomes “alive,”
-it never reverts to “dead.” New cells are born on the edges of existing
-clusters according to the birth rule, causing the initial pattern to expand
-indefinitely without ever shrinking.</p>
+<section id="v-0-0-1-refactoring-with-numpy-and-matplotlib">
+<h2>V.0.0.1 - Refactoring with NumPy and Matplotlib<a class="headerlink" href="#v-0-0-1-refactoring-with-numpy-and-matplotlib" title="Link to this heading">¶</a></h2>
+<p>This version represents a significant refactoring of the original code. It moves from a console-based, ASCII visualization to a graphical one by adopting <strong>NumPy</strong> for matrix operations and <strong>Matplotlib</strong> for visualization. This change makes the code more efficient for large grids and provides a much richer visual output.</p>
+<p>Key changes from V.0.0.0:</p>
+<ul class="simple">
+<li><p><strong>Data Structure:</strong> The core game grid is now a <strong>NumPy array</strong> instead of a Python list of lists. This allows for faster and more memory-efficient calculations.</p></li>
+<li><p><strong>Neighbor Calculation:</strong> The <cite>__alive_nbs</cite> method and its complex logic were replaced by a more elegant, vectorized approach. The <cite>update</cite> method now uses the toroidal boundary condition with the modulo operator (<cite>%</cite>) to count neighbors, a common and efficient method for Game of Life.</p></li>
+<li><p><strong>Visualization:</strong> Instead of printing to the console, the code now generates a series of plots using <strong>Matplotlib</strong> and compiles them into a GIF using <strong>Imageio</strong>. This is a massive leap in functionality and visual quality.</p></li>
+</ul>
+<p>—</p>
 </section>
-<hr class="docutils" />
-<section id="experiment-2-implementing-custom-colors">
-<h2>Experiment 2: Implementing Custom Colors<a class="headerlink" href="#experiment-2-implementing-custom-colors" title="Link to this heading">¶</a></h2>
-<p><strong>Hypothesis</strong></p>
-<p>The default black-and-white (<code class="docutils literal notranslate"><span class="pre">cmap='binary'</span></code>) visualization is classic,
-but custom colors could make the simulation more visually appealing.
-The goal was to change the “alive” cells from black to a specific shade
-of red on a white background.</p>
-<p><strong>Modification</strong></p>
-<p>This required separating the simulation <strong>logic</strong> (which works best with <code class="docutils literal notranslate"><span class="pre">0</span></code>
-for dead and <code class="docutils literal notranslate"><span class="pre">1</span></code> for alive) from the <strong>visualization</strong>.</p>
-<ol class="arabic simple">
-<li><p>The <code class="docutils literal notranslate"><span class="pre">Game</span></code> class was reverted to use <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">1</span></code> for its internal grid state.</p></li>
-</ol>
-<p>2. In the <code class="docutils literal notranslate"><span class="pre">create_animation</span></code> function, a <code class="docutils literal notranslate"><span class="pre">ListedColormap</span></code> from
-<code class="docutils literal notranslate"><span class="pre">matplotlib.colors</span></code> was used. A two-color map was defined: <code class="docutils literal notranslate"><span class="pre">[&quot;white&quot;,</span> <span class="pre">&quot;#f77877&quot;]</span></code>.
-3. The <code class="docutils literal notranslate"><span class="pre">ax.imshow()</span></code> call was updated to use this custom colormap.
-Matplotlib automatically maps the grid’s <code class="docutils literal notranslate"><span class="pre">0</span></code> values to the first color
-(white) and <code class="docutils literal notranslate"><span class="pre">1</span></code> values to the second color (red).</p>
-<p><em>Code Snippet (``create_animation`` function):</em></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span data-line="1"><span class="c1"># Define the colors: the first for value 0, the second for value 1</span>
-</span><span data-line="2"><span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="s2">&quot;#f77877&quot;</span><span class="p">]</span> <span class="c1"># 0 -&gt; white, 1 -&gt; red</span>
-</span><span data-line="3"><span class="n">custom_cmap</span> <span class="o">=</span> <span class="n">mcolors</span><span class="o">.</span><span class="n">ListedColormap</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
-</span><span data-line="4">
-</span><span data-line="5"><span class="c1"># Pass the grid with 0s and 1s. The colormap handles the color translation.</span>
-</span><span data-line="6"><span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">custom_cmap</span><span class="p">)</span>
-</span></pre></div>
-</div>
-<p><strong>Result</strong></p>
-<p>The final <code class="docutils literal notranslate"><span class="pre">.gif</span></code> now correctly displays the simulation with a white
-background and red cells, as intended. This approach cleanly separates
-the model’s data from its visual representation.</p>
+<section id="v-0-0-2-custom-patterns-and-rules">
+<h2>V.0.0.2 - Custom Patterns and Rules<a class="headerlink" href="#v-0-0-2-custom-patterns-and-rules" title="Link to this heading">¶</a></h2>
+<p>This version shifts the focus from a random initial grid to a predefined pattern: four heart shapes. To prevent these patterns from dying under the original rules, the simulation rules were modified to be more “generous” to promote continuous growth.</p>
+<p>Key changes from V.0.0.1:</p>
+<ul class="simple">
+<li><p><strong>Initial State:</strong> The <cite>__init__</cite> method was completely changed to no longer generate a random grid based on a percentage of live cells. Instead, it creates a blank grid and places a predefined heart-shaped pattern in four quadrants.</p></li>
+<li><p><strong>Survival Rules:</strong> The <cite>update</cite> method was modified. The condition for a live cell to survive was expanded from <cite>(alive_n == 2 or alive_n == 3)</cite> to <cite>(alive_n == 2 or alive_n == 3 or alive_n == 4)</cite>. This change allows the patterns to survive and grow without being killed off by overpopulation.</p></li>
+</ul>
+<p>—</p>
+</section>
+<section id="v-1-0-0-a-single-growing-heart">
+<h2>V.1.0.0 - A Single, Growing Heart<a class="headerlink" href="#v-1-0-0-a-single-growing-heart" title="Link to this heading">¶</a></h2>
+<p>This version simplifies the simulation to focus on a single, centrally located growing heart. It removes the previous four-heart pattern, making the simulation cleaner and easier to follow. The code was also translated to English and documented with clear docstrings.</p>
+<p>Key changes from V.0.0.2:</p>
+<ul class="simple">
+<li><p><strong>Pattern Placement:</strong> The <cite>__init__</cite> method was simplified to place only a <strong>single heart pattern</strong> in the center of the grid, rather than four.</p></li>
+<li><p><strong>Code Documentation:</strong> All comments and variable names were translated from Portuguese to English. Comprehensive docstrings were added to the <cite>Game</cite> class and its methods, improving code readability and maintainability.</p></li>
+<li><p><strong>Survival Rules Refinement:</strong> The survival rules were adjusted slightly. The new rule states that a live cell with 2, 3, 4, or 5 neighbors survives. This change further promotes growth by making the “overpopulation” rule less strict.</p></li>
+</ul>
+<p>—</p>
+</section>
+<section id="v-1-0-1-improved-visualization-and-code-structure">
+<h2>V.1.0.1 - Improved Visualization and Code Structure<a class="headerlink" href="#v-1-0-1-improved-visualization-and-code-structure" title="Link to this heading">¶</a></h2>
+<p>This version enhances the visualization and further improves code structure. It introduces a custom color map for the cells and adds more detailed comments to the visualization section.</p>
+<p>Key changes from V.1.0.0:</p>
+<ul class="simple">
+<li><p><strong>Custom Colors:</strong> The visualization now uses a custom <cite>ListedColormap</cite> from <cite>matplotlib.colors</cite>. This allows the “alive” cells to be a specific shade of red (<cite>#f77877</cite>) on a white background, replacing the default black-and-white binary map.</p></li>
+<li><p><strong>Docstrings and Comments:</strong> The docstrings were updated to include a clear explanation of the simulation’s custom rules and the logic behind them. The visualization function was also given more detailed inline comments.</p></li>
+</ul>
+<p>—</p>
+</section>
+<section id="v-1-0-2-performance-optimization-with-scipy-signal-convolve2d">
+<h2>V.1.0.2 - Performance Optimization with <cite>scipy.signal.convolve2d</cite><a class="headerlink" href="#v-1-0-2-performance-optimization-with-scipy-signal-convolve2d" title="Link to this heading">¶</a></h2>
+<p>This version addresses a major performance bottleneck: the use of nested loops for updating the grid. It introduces a vectorized, highly efficient approach using a 2D convolution from the <strong>SciPy</strong> library.</p>
+<p>Key changes from V.1.0.1:</p>
+<ul class="simple">
+<li><p><strong>Vectorized Update Logic:</strong> The <cite>update</cite> method was completely rewritten. It no longer uses nested <cite>for</cite> loops. Instead, it leverages <cite>scipy.signal.convolve2d</cite> to count all neighbors for the entire grid in a single, fast operation.</p></li>
+<li><p><strong>Efficient GIF Creation:</strong> The animation logic was improved to use <cite>imageio.get_writer</cite>. This change eliminates the need to store all frames in memory before saving the GIF, making it possible to generate very long or large animations without running out of RAM.</p></li>
+</ul>
+<p>—</p>
+</section>
+<section id="v-1-0-3-parameter-inputs-and-error-handling">
+<h2>V.1.0.3 - Parameter Inputs and Error Handling<a class="headerlink" href="#v-1-0-3-parameter-inputs-and-error-handling" title="Link to this heading">¶</a></h2>
+<p>This version makes the script more user-friendly and flexible by allowing the user to specify the simulation parameters.</p>
+<p>Key changes from V.1.0.2:</p>
+<ul class="simple">
+<li><p><strong>User Input:</strong> The <cite>if __name__ == ‘__main__’:</cite> block was modified to prompt the user to enter the <cite>matrix_size</cite> and <cite>total_steps</cite> at runtime using the <cite>input()</cite> function.</p></li>
+<li><p><strong>Robustness:</strong> A <cite>try-except</cite> block was added to handle cases where the user enters non-integer input. The program now catches <cite>ValueError</cite> and provides a graceful exit or uses default values, preventing crashes.</p></li>
+</ul>
+<p>—</p>
+</section>
+<section id="v-1-0-4-adding-a-visual-progress-bar">
+<h2>V.1.0.4 - Adding a Visual Progress Bar<a class="headerlink" href="#v-1-0-4-adding-a-visual-progress-bar" title="Link to this heading">¶</a></h2>
+<p>This final version improves the user experience by providing real-time feedback on the simulation’s progress.</p>
+<p>Key changes from V.1.0.3:</p>
+<ul class="simple">
+<li><p><strong>Progress Bar:</strong> The <cite>tqdm</cite> library was integrated to add a dynamic progress bar to the frame generation loop. This simple change provides a clear visual indicator of the simulation’s status, showing the percentage completed and the estimated time remaining, a significant improvement over simple print statements.</p></li>
+</ul>
 </section>
 </section>
 

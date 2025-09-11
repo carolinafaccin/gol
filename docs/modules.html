@@ -140,31 +140,34 @@ advance the simulation to the next generation.</p>
 <dt class="sig sig-object py" id="growingheart.Game.update">
 <span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/growingheart.html#Game.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#growingheart.Game.update" title="Link to this definition">¶</a></dt>
 <dd><p>Advances the simulation by one generation according to custom rules.</p>
-<p>This method calculates the number of live neighbors for each cell on the
-grid and updates its state in a new grid. The rules applied are a
-variation of Conway’s rules designed to promote growth.</p>
-<dl class="simple">
-<dt>Standard Rules of Conway’s Game of Life:</dt><dd><ul class="simple">
-<li><p><strong>Birth (B3):</strong> A dead cell is born if it has exactly 3 live neighbors.</p></li>
-<li><p><strong>Survival (S23):</strong> A live cell survives if it has 2 or 3 live neighbors.</p></li>
-</ul>
-</dd>
-<dt>The specific rules are:</dt><dd><ul class="simple">
-<li><p><strong>Birth (B3):</strong> A dead cell with exactly 3 live neighbors becomes alive.
-The birth rule is kept the same as the original rules.</p></li>
-<li><p><strong>Survival (S2345):</strong> A live cell with 2, 3, 4, or 5 live neighbors
-survives to the next generation. All others die.
-This combats “overpopulation” and encourages larger clusters to form.</p></li>
-</ul>
+<p>This method optimizes the calculation of live neighbors using a 2D
+convolution and applies a modified set of Game of Life rules to the entire
+grid simultaneously using vectorized NumPy operations. This approach
+significantly improves performance compared to an iterative loop.</p>
+<p>The custom rules for this simulation are designed to promote continuous
+growth, preventing cells from dying easily. They are:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>Survival (S2345):</strong> A live cell survives if it has 2, 3, 4, or 5 live</dt><dd><p>neighbors. This deviates from the standard rule (S23) to prevent
+overpopulation from killing off cell clusters.</p>
 </dd>
 </dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Birth (B3):</strong> A dead cell becomes a live cell if it has exactly 3</dt><dd><p>live neighbors. This rule remains the same as in the original Game of Life.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>The use of a convolutional kernel and bitwise operations allows for a
+highly efficient, non-iterative update of the entire grid.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="growingheart.create_animation">
-<span class="sig-prename descclassname"><span class="pre">growingheart.</span></span><span class="sig-name descname"><span class="pre">create_animation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">matriz_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/growingheart.html#create_animation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#growingheart.create_animation" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">growingheart.</span></span><span class="sig-name descname"><span class="pre">create_animation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/growingheart.html#create_animation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#growingheart.create_animation" title="Link to this definition">¶</a></dt>
 <dd><p>Creates and saves an animated GIF of the Game of Life simulation.</p>
 <p>This function initializes a Game instance, runs the simulation for a
 specified number of steps, and generates a visual representation of each
@@ -173,7 +176,7 @@ infinitely looping GIF file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>matriz_size</strong> (<em>int</em>) – The size (width and height) of the square grid.</p></li>
+<li><p><strong>grid_size</strong> (<em>int</em>) – The size (width and height) of the square grid.</p></li>
 <li><p><strong>steps</strong> (<em>int</em>) – The total number of simulation steps (frames) to generate.</p></li>
 <li><p><strong>output_filename</strong> (<em>str</em>) – The full path and filename for the output GIF.</p></li>
 </ul>
