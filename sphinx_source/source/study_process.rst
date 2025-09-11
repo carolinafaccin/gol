@@ -17,6 +17,7 @@ This is the original implementation of the Game of Life as created by Santos (20
 
 ---
 
+
 V.0.0.1 - Refactoring with NumPy and Matplotlib
 -------------------------------------------------
 This version represents a significant refactoring of the original code. It moves from a console-based, ASCII visualization to a graphical one by adopting **NumPy** for matrix operations and **Matplotlib** for visualization. This change makes the code more efficient for large grids and provides a much richer visual output.
