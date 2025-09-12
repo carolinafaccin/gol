@@ -2,7 +2,8 @@
 <html lang="en" data-accent-color="violet" data-content_root="../">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>gol - GOL 0.0.1 documentation</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>gol - GOL 1.0.4 documentation</title><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" />
+      <link rel="canonical" href="https://carolinafaccin.github.io/gol/_modules/gol.html" /><script>
     function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
     setColorMode(localStorage._theme||"auto");
   </script><link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=397bb51e" />
@@ -17,7 +18,9 @@
   --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
 }
 </style>
-    <meta property="og:type" content="website"/><meta property="og:title" content="gol"/>
+    <meta property="og:type" content="website"/>
+<meta property="og:url" content="https://carolinafaccin.github.io/gol/_modules/gol.html"/>
+<meta property="og:title" content="gol"/>
 <meta name="twitter:card" content="summary"/>
   </head>
 <body><div class="sy-head">
@@ -103,134 +106,323 @@ data-aria-dark="Switch to auto color mode">
       <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
         <article class="yue" role="main">
           <h1>Source code for gol</h1><div class="highlight"><pre>
-<span></span><span data-line="1"><span class="c1"># Importando as bibliotecas necessárias</span>
-</span><span data-line="2"><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-</span><span data-line="3"><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-</span><span data-line="4"><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-</span><span data-line="5"><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-</span><span data-line="6"><span class="kn">import</span><span class="w"> </span><span class="nn">imageio</span>
-</span><span data-line="7"><span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">floor</span>
-</span><span data-line="8"><span class="kn">from</span><span class="w"> </span><span class="nn">random</span><span class="w"> </span><span class="kn">import</span> <span class="n">random</span>
-</span><span data-line="9">
-</span><span data-line="10"><span class="c1"># --- Classe principal do Jogo da Vida ---</span>
-</span><span data-line="11"><span class="k">class</span><span class="w"> </span><span class="nc">Game</span><span class="p">():</span>
-</span><span data-line="12">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">linhas</span><span class="p">,</span> <span class="n">colunas</span><span class="p">,</span> <span class="n">vivos_percent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span data-line="13"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span data-line="14"><span class="sd">        Inicializa o tabuleiro do Jogo da Vida.</span>
-</span><span data-line="15"><span class="sd">        Args:</span>
-</span><span data-line="16"><span class="sd">            linhas (int): Número de linhas do tabuleiro.</span>
-</span><span data-line="17"><span class="sd">            colunas (int): Número de colunas do tabuleiro.</span>
-</span><span data-line="18"><span class="sd">            vivos_percent (float): Percentual de células que devem começar vivas (0 a 100).</span>
-</span><span data-line="19"><span class="sd">        &quot;&quot;&quot;</span>
-</span><span data-line="20">        <span class="bp">self</span><span class="o">.</span><span class="n">linhas</span> <span class="o">=</span> <span class="n">linhas</span>
-</span><span data-line="21">        <span class="bp">self</span><span class="o">.</span><span class="n">colunas</span> <span class="o">=</span> <span class="n">colunas</span>
-</span><span data-line="22">        
-</span><span data-line="23">        <span class="c1"># Usando NumPy para criar o grid. É mais eficiente para operações com matrizes.</span>
-</span><span data-line="24">        <span class="c1"># O grid terá valores 1 (vivo) e 0 (morto).</span>
-</span><span data-line="25">        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span>
-</span><span data-line="26">            <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> 
-</span><span data-line="27">            <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">linhas</span><span class="p">,</span> <span class="n">colunas</span><span class="p">),</span> 
-</span><span data-line="28">            <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="n">vivos_percent</span> <span class="o">/</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">vivos_percent</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)]</span>
-</span><span data-line="29">        <span class="p">)</span>
-</span><span data-line="30">
-</span><span data-line="31">    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-</span><span data-line="32"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span data-line="33"><span class="sd">        Aplica as regras do Jogo da Vida para avançar uma geração (step).</span>
-</span><span data-line="34"><span class="sd">        &quot;&quot;&quot;</span>
-</span><span data-line="35">        <span class="c1"># Cria uma cópia do grid para calcular o próximo estado</span>
-</span><span data-line="36">        <span class="n">new_grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-</span><span data-line="37">
-</span><span data-line="38">        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linhas</span><span class="p">):</span>
-</span><span data-line="39">            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">colunas</span><span class="p">):</span>
-</span><span data-line="40">                <span class="c1"># Contando os vizinhos vivos</span>
-</span><span data-line="41">                <span class="c1"># O operador % (módulo) garante que o tabuleiro seja &quot;infinito&quot; (toroidal)</span>
-</span><span data-line="42">                <span class="c1"># ou seja, a borda direita se conecta com a esquerda, e a superior com a inferior.</span>
-</span><span data-line="43">                <span class="n">total_vizinhos</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span>
-</span><span data-line="44">                    <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">linhas</span><span class="p">,</span> <span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">colunas</span><span class="p">]</span> <span class="o">+</span>
-</span><span data-line="45">                    <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">linhas</span><span class="p">,</span> <span class="n">j</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">colunas</span><span class="p">]</span> <span class="o">+</span>
-</span><span data-line="46">                    <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">linhas</span><span class="p">,</span> <span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">colunas</span><span class="p">]</span> <span class="o">+</span>
-</span><span data-line="47">                    <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">linhas</span><span class="p">,</span> <span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">colunas</span><span class="p">]</span> <span class="o">+</span>
-</span><span data-line="48">                    <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">linhas</span><span class="p">,</span> <span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">colunas</span><span class="p">]</span> <span class="o">+</span>
-</span><span data-line="49">                    <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">linhas</span><span class="p">,</span> <span class="p">(</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">colunas</span><span class="p">]</span> <span class="o">+</span>
-</span><span data-line="50">                    <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">linhas</span><span class="p">,</span> <span class="n">j</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">colunas</span><span class="p">]</span> <span class="o">+</span>
-</span><span data-line="51">                    <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">linhas</span><span class="p">,</span> <span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">colunas</span><span class="p">]</span>
-</span><span data-line="52">                <span class="p">))</span>
-</span><span data-line="53">
-</span><span data-line="54">                <span class="c1"># Aplicando as regras de Conway</span>
-</span><span data-line="55">                <span class="c1"># 1. Célula viva com menos de 2 vizinhos vivos morre (solidão).</span>
-</span><span data-line="56">                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="p">(</span><span class="n">total_vizinhos</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">):</span>
-</span><span data-line="57">                    <span class="n">new_grid</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span data-line="58">                <span class="c1"># 2. Célula viva com mais de 3 vizinhos vivos morre (superpopulação).</span>
-</span><span data-line="59">                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="p">(</span><span class="n">total_vizinhos</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">):</span>
-</span><span data-line="60">                    <span class="n">new_grid</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-</span><span data-line="61">                <span class="c1"># 3. Célula morta com exatamente 3 vizinhos vivos se torna viva (reprodução).</span>
-</span><span data-line="62">                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="p">(</span><span class="n">total_vizinhos</span> <span class="o">==</span> <span class="mi">3</span><span class="p">):</span>
-</span><span data-line="63">                    <span class="n">new_grid</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-</span><span data-line="64">                <span class="c1"># 4. Célula viva com 2 ou 3 vizinhos vivos sobrevive. (Não precisa de código, pois ela já é 1)</span>
+<span></span><span data-line="1"><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="2"><span class="sd">A simulation of Conway&#39;s Game of Life with custom growth rules.</span>
+</span><span data-line="3">
+</span><span data-line="4"><span class="sd">This script implements a variation of Conway&#39;s Game of Life that starts</span>
+</span><span data-line="5"><span class="sd">with a single heart-shaped pattern. The rules are modified to favor</span>
+</span><span data-line="6"><span class="sd">continuous growth, preventing cells from dying.</span>
+</span><span data-line="7">
+</span><span data-line="8">
+</span><span data-line="9"><span class="sd">Under traditional rules, the cells forming the heart would diminish</span>
+</span><span data-line="10"><span class="sd">due to the rules of loneliness (a live cell with fewer than 2 neighbors dies)</span>
+</span><span data-line="11"><span class="sd">and overpopulation (a live cell with more than 3 neighbors dies).</span>
+</span><span data-line="12">
+</span><span data-line="13"><span class="sd">To make the heart &quot;grow&quot;, the rules needed to be made more &quot;generous&quot;,</span>
+</span><span data-line="14"><span class="sd">allowing cells to survive with more neighbors and thus expand.</span>
+</span><span data-line="15">
+</span><span data-line="16"><span class="sd">To change this rule, the &#39;update&#39; method within the &#39;Game&#39; class was adjusted.</span>
+</span><span data-line="17">
+</span><span data-line="18">
+</span><span data-line="19">
+</span><span data-line="20"><span class="sd">The simulation is visualized using Matplotlib and saved as an animated,</span>
+</span><span data-line="21"><span class="sd">infinitely looping GIF.</span>
+</span><span data-line="22"><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="23">
+</span><span data-line="24">
+</span><span data-line="25"><span class="c1"># Importing necessary libraries</span>
+</span><span data-line="26"><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span data-line="27"><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+</span><span data-line="28"><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.colors</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mcolors</span>
+</span><span data-line="29"><span class="kn">import</span><span class="w"> </span><span class="nn">imageio</span>
+</span><span data-line="30"><span class="kn">import</span><span class="w"> </span><span class="nn">scipy.signal</span>
+</span><span data-line="31"><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+</span><span data-line="32"><span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+</span><span data-line="33">
+</span><span data-line="34"><span class="c1"># --- Main Game of Life Class ---</span>
+</span><span data-line="35">
+<div class="viewcode-block" id="Game">
+<a class="viewcode-back" href="../modules.html#gol.Game">[docs]</a>
+</span><span data-line="36"><span class="k">class</span><span class="w"> </span><span class="nc">Game</span><span class="p">():</span>
+</span><span data-line="37"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="38"><span class="sd">    Manages the state and rules of a Game of Life simulation.</span>
+</span><span data-line="39">
+</span><span data-line="40"><span class="sd">    This class holds the grid of cells and provides the mechanism to</span>
+</span><span data-line="41"><span class="sd">    advance the simulation to the next generation.</span>
+</span><span data-line="42"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="43">
+</span><span data-line="44">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="p">,</span> <span class="n">survival_rules</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="n">birth_rules</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="45"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="46"><span class="sd">        Initializes the Game of Life board with configurable rules.</span>
+</span><span data-line="47">
+</span><span data-line="48"><span class="sd">        Sets up an empty grid of a given size and places a single, </span>
+</span><span data-line="49"><span class="sd">        predefined heart-shaped pattern in the center.</span>
+</span><span data-line="50">
+</span><span data-line="51"><span class="sd">        Args:</span>
+</span><span data-line="52"><span class="sd">            rows (int): The number of rows for the simulation grid.</span>
+</span><span data-line="53"><span class="sd">            columns (int): The number of columns for the simulation grid.</span>
+</span><span data-line="54"><span class="sd">            survival_rules (list[int]): A list of neighbor counts for a live cell to survive.</span>
+</span><span data-line="55"><span class="sd">            birth_rules (list[int]): A list of neighbor counts for a dead cell to be born.</span>
+</span><span data-line="56"><span class="sd">        </span>
+</span><span data-line="57"><span class="sd">        Attributes:</span>
+</span><span data-line="58"><span class="sd">            rows (int): Stores the number of rows.</span>
+</span><span data-line="59"><span class="sd">            columns (int): Stores the number of columns.</span>
+</span><span data-line="60"><span class="sd">            grid (np.ndarray): A 2D NumPy array representing the cell states</span>
+</span><span data-line="61"><span class="sd">                (0 for dead, 1 for alive).</span>
+</span><span data-line="62"><span class="sd">            survival_rules (list[int]): Stores the survival rules.</span>
+</span><span data-line="63"><span class="sd">            birth_rules (list[int]): Stores the birth rules.</span>
+</span><span data-line="64"><span class="sd">        &quot;&quot;&quot;</span>
 </span><span data-line="65">        
-</span><span data-line="66">        <span class="c1"># Atualiza o grid principal com o novo estado</span>
-</span><span data-line="67">        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">=</span> <span class="n">new_grid</span>
-</span><span data-line="68">
-</span><span data-line="69"><span class="c1"># --- Função para criar e salvar a animação (VERSÃO CORRIGIDA PARA MACOS) ---</span>
-<div class="viewcode-block" id="criar_animacao">
-<a class="viewcode-back" href="../modules.html#gol.criar_animacao">[docs]</a>
-</span><span data-line="70"><span class="k">def</span><span class="w"> </span><span class="nf">criar_animacao</span><span class="p">(</span><span class="n">matriz_size</span><span class="p">,</span> <span class="n">alives_percent</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="n">output_filename</span><span class="p">):</span>
-</span><span data-line="71"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span data-line="72"><span class="sd">    Executa a simulação e gera um GIF animado.</span>
-</span><span data-line="73"><span class="sd">    Args:</span>
-</span><span data-line="74"><span class="sd">        matriz_size (int): O tamanho da matriz quadrada.</span>
-</span><span data-line="75"><span class="sd">        alives_percent (int): O percentual inicial de células vivas.</span>
-</span><span data-line="76"><span class="sd">        steps (int): O número de gerações a serem simuladas.</span>
-</span><span data-line="77"><span class="sd">        output_filename (str): O nome do arquivo .gif a ser salvo.</span>
-</span><span data-line="78"><span class="sd">    &quot;&quot;&quot;</span>
-</span><span data-line="79">    <span class="n">game</span> <span class="o">=</span> <span class="n">Game</span><span class="p">(</span><span class="n">matriz_size</span><span class="p">,</span> <span class="n">matriz_size</span><span class="p">,</span> <span class="n">alives_percent</span><span class="p">)</span>
-</span><span data-line="80">    <span class="n">frames</span> <span class="o">=</span> <span class="p">[]</span>
-</span><span data-line="81">
-</span><span data-line="82">    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Gerando frames para a animação...&quot;</span><span class="p">)</span>
-</span><span data-line="83">    <span class="k">for</span> <span class="n">step_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
-</span><span data-line="84">        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-</span><span data-line="85">        <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;binary&#39;</span><span class="p">)</span> 
-</span><span data-line="86">        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Game of Life - Step: </span><span class="si">{</span><span class="n">step_num</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
-</span><span data-line="87">        <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
-</span><span data-line="88">        <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
-</span><span data-line="89">
-</span><span data-line="90">        <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
-</span><span data-line="91">        
-</span><span data-line="92">        <span class="c1"># Pega as dimensões FÍSICAS do renderer, após o desenho</span>
-</span><span data-line="93">        <span class="n">width_float</span><span class="p">,</span> <span class="n">height_float</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">get_canvas_width_height</span><span class="p">()</span>
-</span><span data-line="94">        <span class="n">width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">width_float</span><span class="p">)</span>
-</span><span data-line="95">        <span class="n">height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">height_float</span><span class="p">)</span>
-</span><span data-line="96">        
-</span><span data-line="97">        <span class="n">buffer</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">tostring_argb</span><span class="p">()</span> <span class="c1"># Pega o buffer de dados</span>
-</span><span data-line="98">        
-</span><span data-line="99">        <span class="c1"># Usa as dimensões físicas corretas (height, width) no reshape</span>
-</span><span data-line="100">        <span class="n">image_rgba</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;uint8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-</span><span data-line="101">        
-</span><span data-line="102">        <span class="n">frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">image_rgba</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">])</span> <span class="c1"># Converte de RGBA para RGB</span>
-</span><span data-line="103">        <span class="c1"># --- FIM DA CORREÇÃO ---</span>
-</span><span data-line="104">        
-</span><span data-line="105">        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
-</span><span data-line="106">        <span class="n">game</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-</span><span data-line="107">        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - Step </span><span class="si">{</span><span class="n">step_num</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">steps</span><span class="si">}</span><span class="s2"> concluído.&quot;</span><span class="p">)</span>
-</span><span data-line="108">
-</span><span data-line="109">    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Salvando animação em &#39;</span><span class="si">{</span><span class="n">output_filename</span><span class="si">}</span><span class="s2">&#39;...&quot;</span><span class="p">)</span>
-</span><span data-line="110">    <span class="n">imageio</span><span class="o">.</span><span class="n">mimsave</span><span class="p">(</span><span class="n">output_filename</span><span class="p">,</span> <span class="n">frames</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-</span><span data-line="111">    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Animação salva com sucesso!&quot;</span><span class="p">)</span></div>
-
+</span><span data-line="66">        <span class="bp">self</span><span class="o">.</span><span class="n">rows</span> <span class="o">=</span> <span class="n">rows</span>
+</span><span data-line="67">        <span class="bp">self</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">columns</span>
+</span><span data-line="68">        <span class="bp">self</span><span class="o">.</span><span class="n">survival_rules</span> <span class="o">=</span> <span class="n">survival_rules</span>
+</span><span data-line="69">        <span class="bp">self</span><span class="o">.</span><span class="n">birth_rules</span> <span class="o">=</span> <span class="n">birth_rules</span>
+</span><span data-line="70">        
+</span><span data-line="71">        <span class="c1"># 1. Start with a completely empty grid (dtype=int is fine for 0s and 1s)</span>
+</span><span data-line="72">        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+</span><span data-line="73">
+</span><span data-line="74">        <span class="c1"># 2. Define the heart pattern using 1 for &quot;alive&quot;</span>
+</span><span data-line="75">        <span class="n">heart_pattern</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+</span><span data-line="76">            <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+</span><span data-line="77">            <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+</span><span data-line="78">            <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+</span><span data-line="79">            <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+</span><span data-line="80">            <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+</span><span data-line="81">            <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+</span><span data-line="82">        <span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+</span><span data-line="83">
+</span><span data-line="84">        <span class="c1"># Helper function to place a pattern at a given position</span>
+</span><span data-line="85">        <span class="k">def</span><span class="w"> </span><span class="nf">place_pattern</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">center_row</span><span class="p">,</span> <span class="n">center_col</span><span class="p">):</span>
+</span><span data-line="86">            <span class="n">pattern_height</span><span class="p">,</span> <span class="n">pattern_width</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">shape</span>
+</span><span data-line="87">            <span class="n">start_row</span> <span class="o">=</span> <span class="n">center_row</span> <span class="o">-</span> <span class="n">pattern_height</span> <span class="o">//</span> <span class="mi">2</span>
+</span><span data-line="88">            <span class="n">start_col</span> <span class="o">=</span> <span class="n">center_col</span> <span class="o">-</span> <span class="n">pattern_width</span> <span class="o">//</span> <span class="mi">2</span>
+</span><span data-line="89">            
+</span><span data-line="90">            <span class="c1"># Ensures the pattern fits on the grid before placing it</span>
+</span><span data-line="91">            <span class="k">if</span> <span class="n">start_row</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">start_col</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> \
+</span><span data-line="92">               <span class="p">(</span><span class="n">start_row</span> <span class="o">+</span> <span class="n">pattern_height</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> \
+</span><span data-line="93">               <span class="p">(</span><span class="n">start_col</span> <span class="o">+</span> <span class="n">pattern_width</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+</span><span data-line="94">                <span class="n">grid</span><span class="p">[</span><span class="n">start_row</span> <span class="p">:</span> <span class="n">start_row</span> <span class="o">+</span> <span class="n">pattern_height</span><span class="p">,</span> <span class="n">start_col</span> <span class="p">:</span> <span class="n">start_col</span> <span class="o">+</span> <span class="n">pattern_width</span><span class="p">]</span> <span class="o">=</span> <span class="n">pattern</span>
+</span><span data-line="95">        
+</span><span data-line="96">        <span class="c1"># 3. Calculate the cent≤er of the grid</span>
+</span><span data-line="97">        <span class="n">center_row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rows</span> <span class="o">//</span> <span class="mi">2</span>
+</span><span data-line="98">        <span class="n">center_col</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span> <span class="o">//</span> <span class="mi">2</span>
+</span><span data-line="99">
+</span><span data-line="100">        <span class="c1"># 4. Place the heart pattern in the center of the grid</span>
+</span><span data-line="101">        <span class="n">place_pattern</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">heart_pattern</span><span class="p">,</span> <span class="n">center_row</span><span class="p">,</span> <span class="n">center_col</span><span class="p">)</span>
+</span><span data-line="102">    
+<div class="viewcode-block" id="Game.update">
+<a class="viewcode-back" href="../modules.html#gol.Game.update">[docs]</a>
+</span><span data-line="103">    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span data-line="104"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="105"><span class="sd">        Advances the simulation by one generation according to configurable rules.</span>
+</span><span data-line="106">
+</span><span data-line="107"><span class="sd">        This method calculates the number of live neighbors for each cell on the</span>
+</span><span data-line="108"><span class="sd">        grid using a highly optimized 2D convolution from the SciPy library. It</span>
+</span><span data-line="109"><span class="sd">        then applies the rules defined in the `survival_rules` and `birth_rules`</span>
+</span><span data-line="110"><span class="sd">        attributes of the class to the entire grid using efficient vectorized</span>
+</span><span data-line="111"><span class="sd">        NumPy operations.</span>
 </span><span data-line="112">
-</span><span data-line="113">
-</span><span data-line="114"><span class="c1"># --- Execução Principal do Script ---</span>
-</span><span data-line="115"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-</span><span data-line="116">    <span class="c1"># Coletando informações do usuário</span>
-</span><span data-line="117">    <span class="n">matriz_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Qual será o tamanho da matriz quadrada? (sugestão: 50 a 200): &#39;</span><span class="p">))</span>
-</span><span data-line="118">    <span class="n">alives</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Qual o percentual de células vivas no início? (0 a 100): &#39;</span><span class="p">))</span>
-</span><span data-line="119">    <span class="n">total_steps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Quantos steps (gerações) você quer simular no GIF? (sugestão: 100): &#39;</span><span class="p">))</span>
-</span><span data-line="120">    
-</span><span data-line="121">    <span class="c1"># Nome do arquivo de saída</span>
-</span><span data-line="122">    <span class="n">gif_filename</span> <span class="o">=</span> <span class="s2">&quot;game_of_life.gif&quot;</span>
-</span><span data-line="123">
-</span><span data-line="124">    <span class="c1"># Chama a função principal que cria a animação</span>
-</span><span data-line="125">    <span class="n">criar_animacao</span><span class="p">(</span><span class="n">matriz_size</span><span class="p">,</span> <span class="n">alives</span><span class="p">,</span> <span class="n">total_steps</span><span class="p">,</span> <span class="n">gif_filename</span><span class="p">)</span>
+</span><span data-line="113"><span class="sd">        This approach replaces the slower nested for-loops, making the simulation</span>
+</span><span data-line="114"><span class="sd">        significantly more performant, especially for larger grids. The use of</span>
+</span><span data-line="115"><span class="sd">        configurable rules allows the same code to simulate different &quot;universes&quot;</span>
+</span><span data-line="116"><span class="sd">        or rule sets (e.g., standard Conway&#39;s Life, HighLife, Day &amp; Night) by</span>
+</span><span data-line="117"><span class="sd">        simply passing different lists during initialization.</span>
+</span><span data-line="118">
+</span><span data-line="119"><span class="sd">        The core logic is as follows:</span>
+</span><span data-line="120"><span class="sd">        - A dead cell becomes alive if its neighbor count is in `self.birth_rules`.</span>
+</span><span data-line="121"><span class="sd">        - A live cell survives if its neighbor count is in `self.survival_rules`.</span>
+</span><span data-line="122"><span class="sd">        - All other cells die or remain dead.</span>
+</span><span data-line="123"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="124">
+</span><span data-line="125">        <span class="c1"># Define the 3x3 kernel for the 2D convolution.</span>
+</span><span data-line="126">        <span class="n">kernel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+</span><span data-line="127">                        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+</span><span data-line="128">                        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+</span><span data-line="129">
+</span><span data-line="130">        <span class="c1"># Apply 2D convolution to count live neighbors for every cell at once.</span>
+</span><span data-line="131">        <span class="n">total_neighbors</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">convolve2d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">,</span> <span class="n">boundary</span><span class="o">=</span><span class="s2">&quot;wrap&quot;</span><span class="p">)</span>
+</span><span data-line="132">
+</span><span data-line="133">        <span class="c1"># Create the new grid based on the rules using vectorized operations.</span>
+</span><span data-line="134">        <span class="n">new_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">)</span>
+</span><span data-line="135">
+</span><span data-line="136">        <span class="c1"># Survival Rule: A live cell survives if its neighbor count is in the survival_rules list.</span>
+</span><span data-line="137">        <span class="n">survival_mask</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">total_neighbors</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">survival_rules</span><span class="p">))</span>
+</span><span data-line="138">        <span class="n">new_grid</span><span class="p">[</span><span class="n">survival_mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span data-line="139">
+</span><span data-line="140">        <span class="c1"># Birth Rule: A dead cell is born if its neighbor count is in the birth_rules list.</span>
+</span><span data-line="141">        <span class="n">birth_mask</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">total_neighbors</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">birth_rules</span><span class="p">))</span>
+</span><span data-line="142">        <span class="n">new_grid</span><span class="p">[</span><span class="n">birth_mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span data-line="143">
+</span><span data-line="144">        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">=</span> <span class="n">new_grid</span></div>
+</div>
+
+</span><span data-line="145">
+</span><span data-line="146">
+</span><span data-line="147"><span class="c1"># --- Renderer Class ---</span>
+</span><span data-line="148">
+<div class="viewcode-block" id="Renderer">
+<a class="viewcode-back" href="../modules.html#gol.Renderer">[docs]</a>
+</span><span data-line="149"><span class="k">class</span><span class="w"> </span><span class="nc">Renderer</span><span class="p">():</span>
+</span><span data-line="150"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="151"><span class="sd">    The Renderer class encapsulates all the visualization logic.</span>
+</span><span data-line="152"><span class="sd">    It receives style parameters and is responsible for generating images (frames).</span>
+</span><span data-line="153">
+</span><span data-line="154"><span class="sd">    Handles the visualization of the Game of Life grid using Matplotlib.</span>
+</span><span data-line="155"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="156">
+</span><span data-line="157">    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell_colors</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">3.5</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">110</span><span class="p">):</span>
+</span><span data-line="158"><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="159"><span class="sd">        Initializes the renderer with specific visualization parameters.</span>
+</span><span data-line="160">
+</span><span data-line="161"><span class="sd">        Args:</span>
+</span><span data-line="162"><span class="sd">            cell_colors (list): A list of colors for dead and alive cells.</span>
+</span><span data-line="163"><span class="sd">            figsize (tuple): The figure size for the plot.</span>
+</span><span data-line="164"><span class="sd">            dpi (int): The resolution of the figure.</span>
+</span><span data-line="165"><span class="sd">        &quot;&quot;&quot;</span>
+</span><span data-line="166">        <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="n">cell_colors</span>
+</span><span data-line="167">        <span class="bp">self</span><span class="o">.</span><span class="n">cmap</span> <span class="o">=</span> <span class="n">mcolors</span><span class="o">.</span><span class="n">ListedColormap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">)</span>
+</span><span data-line="168">        <span class="bp">self</span><span class="o">.</span><span class="n">figsize</span> <span class="o">=</span> <span class="n">figsize</span>
+</span><span data-line="169">        <span class="bp">self</span><span class="o">.</span><span class="n">dpi</span> <span class="o">=</span> <span class="n">dpi</span>
+</span><span data-line="170">
+</span><span data-line="171">    <span class="k">def</span><span class="w"> </span><span class="nf">render_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">step_num</span><span class="p">):</span>
+</span><span data-line="172">        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">figsize</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dpi</span><span class="p">)</span>
+</span><span data-line="173">
+</span><span data-line="174">        <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cmap</span><span class="p">)</span>
+</span><span data-line="175">        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Step: </span><span class="si">{</span><span class="n">step_num</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">fontname</span><span class="o">=</span><span class="s1">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</span><span data-line="176">        <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+</span><span data-line="177">        <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+</span><span data-line="178">
+</span><span data-line="179">        <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span data-line="180">        <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</span><span data-line="181">
+</span><span data-line="182">        <span class="c1"># Pega dimensões corretas pelo renderer (funciona no Mac)</span>
+</span><span data-line="183">        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">get_canvas_width_height</span><span class="p">())</span>
+</span><span data-line="184">
+</span><span data-line="185">        <span class="n">buffer</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">tostring_argb</span><span class="p">()</span>
+</span><span data-line="186">        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+</span><span data-line="187">
+</span><span data-line="188">        <span class="c1"># Converte buffer em array</span>
+</span><span data-line="189">        <span class="n">image_argb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+</span><span data-line="190">
+</span><span data-line="191">        <span class="c1"># ARGB → RGB</span>
+</span><span data-line="192">        <span class="k">return</span> <span class="n">image_argb</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]]</span></div>
+
+</span><span data-line="193">
+</span><span data-line="194">
+</span><span data-line="195"><span class="c1"># --- Create Gif Function ---</span>
+</span><span data-line="196">
+<div class="viewcode-block" id="create_gif">
+<a class="viewcode-back" href="../modules.html#gol.create_gif">[docs]</a>
+</span><span data-line="197"><span class="k">def</span><span class="w"> </span><span class="nf">create_gif</span><span class="p">(</span><span class="n">game_instance</span><span class="p">,</span> <span class="n">renderer_instance</span><span class="p">,</span> <span class="n">steps</span><span class="p">,</span> <span class="n">output_filename</span><span class="p">):</span>
+</span><span data-line="198"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="199"><span class="sd">    Creates and saves an animated GIF of the simulation.</span>
+</span><span data-line="200">
+</span><span data-line="201"><span class="sd">    Args:</span>
+</span><span data-line="202"><span class="sd">        game_instance (Game): The Game object to simulate.</span>
+</span><span data-line="203"><span class="sd">        renderer_instance (Renderer): The Renderer object for visualization.</span>
+</span><span data-line="204"><span class="sd">        steps (int): The total number of simulation steps to generate.</span>
+</span><span data-line="205"><span class="sd">        output_filename (str): The full path for the output GIF file.</span>
+</span><span data-line="206"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="207">    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Generating frames for the animation...&quot;</span><span class="p">)</span>
+</span><span data-line="208">
+</span><span data-line="209">    <span class="k">with</span> <span class="n">imageio</span><span class="o">.</span><span class="n">get_writer</span><span class="p">(</span><span class="n">output_filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+</span><span data-line="210">        <span class="k">for</span> <span class="n">step_num</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Generating GIF frames&quot;</span><span class="p">):</span>
+</span><span data-line="211">            <span class="n">frame</span> <span class="o">=</span> <span class="n">renderer_instance</span><span class="o">.</span><span class="n">render_frame</span><span class="p">(</span><span class="n">game_instance</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">step_num</span><span class="p">)</span>
+</span><span data-line="212">            <span class="n">writer</span><span class="o">.</span><span class="n">append_data</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+</span><span data-line="213">            <span class="n">game_instance</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+</span><span data-line="214">
+</span><span data-line="215">    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Animation saved successfully to &#39;</span><span class="si">{</span><span class="n">output_filename</span><span class="si">}</span><span class="s2">&#39;!&quot;</span><span class="p">)</span></div>
+
+</span><span data-line="216">
+</span><span data-line="217">
+</span><span data-line="218"><span class="c1"># --- Create Visualization Function ---</span>
+</span><span data-line="219">
+<div class="viewcode-block" id="create_visualization">
+<a class="viewcode-back" href="../modules.html#gol.create_visualization">[docs]</a>
+</span><span data-line="220"><span class="k">def</span><span class="w"> </span><span class="nf">create_visualization</span><span class="p">(</span><span class="n">game_instance</span><span class="p">,</span> <span class="n">renderer_instance</span><span class="p">,</span> <span class="n">steps</span><span class="p">):</span>
+</span><span data-line="221"><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span data-line="222"><span class="sd">    Generates a real-time visualization of the simulation in a pop-up window.</span>
+</span><span data-line="223">
+</span><span data-line="224"><span class="sd">    Args:</span>
+</span><span data-line="225"><span class="sd">        game_instance (Game): The Game object to simulate.</span>
+</span><span data-line="226"><span class="sd">        renderer_instance (Renderer): The Renderer object for visualization.</span>
+</span><span data-line="227"><span class="sd">        steps (int): The total number of simulation steps to run.</span>
+</span><span data-line="228"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span data-line="229">    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Starting real-time visualization (close the window to stop)...&quot;</span><span class="p">)</span>
+</span><span data-line="230">    
+</span><span data-line="231">    <span class="c1"># Enable interactive mode for real-time plotting</span>
+</span><span data-line="232">    <span class="n">plt</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
+</span><span data-line="233">    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="n">renderer_instance</span><span class="o">.</span><span class="n">figsize</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="n">renderer_instance</span><span class="o">.</span><span class="n">dpi</span><span class="p">)</span>
+</span><span data-line="234">
+</span><span data-line="235">    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">([])</span>
+</span><span data-line="236">    <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+</span><span data-line="237">
+</span><span data-line="238">    <span class="k">for</span> <span class="n">step_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
+</span><span data-line="239">        <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">game_instance</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">renderer_instance</span><span class="o">.</span><span class="n">cmap</span><span class="p">)</span>
+</span><span data-line="240">        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Step: </span><span class="si">{</span><span class="n">step_num</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span data-line="241">        
+</span><span data-line="242">        <span class="c1"># Update the plot in real-time</span>
+</span><span data-line="243">        <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</span><span data-line="244">        <span class="n">plt</span><span class="o">.</span><span class="n">pause</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>  <span class="c1"># Pause for a brief moment to show the frame</span>
+</span><span data-line="245">        
+</span><span data-line="246">        <span class="n">game_instance</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+</span><span data-line="247">    
+</span><span data-line="248">    <span class="n">plt</span><span class="o">.</span><span class="n">ioff</span><span class="p">()</span>
+</span><span data-line="249">    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> <span class="c1"># Keep the last frame displayed until the user closes the window</span></div>
+
+</span><span data-line="250">
+</span><span data-line="251">
+</span><span data-line="252"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+</span><span data-line="253">    
+</span><span data-line="254">    <span class="c1"># --- GET SIMULATION PARAMETERS FROM USER INPUT ---</span>
+</span><span data-line="255">    <span class="k">try</span><span class="p">:</span>
+</span><span data-line="256">        <span class="n">matrix_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the grid size (e.g., 40): &quot;</span><span class="p">))</span>
+</span><span data-line="257">        <span class="n">total_steps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter the number of simulation steps (e.g., 50): &quot;</span><span class="p">))</span>
+</span><span data-line="258">    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+</span><span data-line="259">        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Invalid input. Please enter a valid integer.&quot;</span><span class="p">)</span>
+</span><span data-line="260">        <span class="n">matrix_size</span> <span class="o">=</span> <span class="mi">40</span>
+</span><span data-line="261">        <span class="n">total_steps</span> <span class="o">=</span> <span class="mi">41</span>
+</span><span data-line="262">        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using default values: grid size = </span><span class="si">{</span><span class="n">matrix_size</span><span class="si">}</span><span class="s2">, steps = </span><span class="si">{</span><span class="n">total_steps</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span data-line="263">    
+</span><span data-line="264">    <span class="c1"># Define the rules and renderer</span>
+</span><span data-line="265">    <span class="n">current_survival_rules</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+</span><span data-line="266">    <span class="n">current_birth_rules</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+</span><span data-line="267">    <span class="n">cell_colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="s2">&quot;#f77877&quot;</span><span class="p">]</span>
+</span><span data-line="268">
+</span><span data-line="269">    <span class="c1"># Create the Game instance</span>
+</span><span data-line="270">    <span class="n">game_instance</span> <span class="o">=</span> <span class="n">Game</span><span class="p">(</span><span class="n">matrix_size</span><span class="p">,</span> <span class="n">matrix_size</span><span class="p">,</span> <span class="n">survival_rules</span><span class="o">=</span><span class="n">current_survival_rules</span><span class="p">,</span> <span class="n">birth_rules</span><span class="o">=</span><span class="n">current_birth_rules</span><span class="p">)</span>
+</span><span data-line="271">    
+</span><span data-line="272">    <span class="c1"># Create the Renderer instance</span>
+</span><span data-line="273">    <span class="n">renderer_instance</span> <span class="o">=</span> <span class="n">Renderer</span><span class="p">(</span><span class="n">cell_colors</span><span class="o">=</span><span class="n">cell_colors</span><span class="p">)</span>
+</span><span data-line="274">    
+</span><span data-line="275">    <span class="c1"># --- GET USER&#39;S CHOICE (BEFORE THE GIF LOGIC) ---</span>
+</span><span data-line="276">    <span class="n">choice</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Enter &#39;gif&#39; to create an animated GIF or &#39;live&#39; for real-time visualization: &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+</span><span data-line="277">
+</span><span data-line="278">    <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="s1">&#39;gif&#39;</span><span class="p">:</span>
+</span><span data-line="279">        <span class="c1"># --- Logic to create folder and filename for GIF file ---</span>
+</span><span data-line="280">        <span class="n">script_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+</span><span data-line="281">        <span class="n">project_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">script_dir</span><span class="p">)</span>
+</span><span data-line="282">        <span class="n">output_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_root</span><span class="p">,</span> <span class="s1">&#39;figures&#39;</span><span class="p">,</span> <span class="s1">&#39;gif&#39;</span><span class="p">,</span> <span class="s1">&#39;tests&#39;</span><span class="p">)</span>
+</span><span data-line="283">        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span data-line="284">        <span class="n">base_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+</span><span data-line="285">
+</span><span data-line="286">        <span class="c1"># Find the next available version number</span>
+</span><span data-line="287">        <span class="n">version</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span data-line="288">        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+</span><span data-line="289">            <span class="n">version_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;v</span><span class="si">{</span><span class="n">version</span><span class="si">:</span><span class="s2">03d</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span data-line="290">            <span class="n">gif_filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">base_filename</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">version_str</span><span class="si">}</span><span class="s2">.gif&quot;</span>
+</span><span data-line="291">            <span class="n">full_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">gif_filename</span><span class="p">)</span>
+</span><span data-line="292">
+</span><span data-line="293">            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">full_path</span><span class="p">):</span>
+</span><span data-line="294">                <span class="k">break</span>
+</span><span data-line="295">            <span class="n">version</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span data-line="296">        
+</span><span data-line="297">        <span class="n">create_gif</span><span class="p">(</span><span class="n">game_instance</span><span class="p">,</span> <span class="n">renderer_instance</span><span class="p">,</span> <span class="n">total_steps</span><span class="p">,</span> <span class="n">full_path</span><span class="p">)</span>
+</span><span data-line="298">    
+</span><span data-line="299">    <span class="k">elif</span> <span class="n">choice</span> <span class="o">==</span> <span class="s1">&#39;live&#39;</span><span class="p">:</span>
+</span><span data-line="300">        <span class="n">create_visualization</span><span class="p">(</span><span class="n">game_instance</span><span class="p">,</span> <span class="n">renderer_instance</span><span class="p">,</span> <span class="n">total_steps</span><span class="p">)</span>
+</span><span data-line="301">    <span class="k">else</span><span class="p">:</span>
+</span><span data-line="302">        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Invalid choice. Please run the script again and choose &#39;gif&#39; or &#39;live&#39;.&quot;</span><span class="p">)</span>
 </span></pre></div>
         </article><button class="back-to-top" type="button">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -258,7 +450,7 @@ data-aria-dark="Switch to auto color mode">
     </div>
   </div>
 </footer>
-      <script src="../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../_static/documentation_options.js?v=71272d9f"></script>
       <script src="../_static/doctools.js?v=9bcbadda"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="../_static/shibuya.js?v=e730760c"></script></body>

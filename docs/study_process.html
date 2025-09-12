@@ -2,7 +2,7 @@
 <html lang="en" data-accent-color="violet" data-content_root="./">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Study Process Documentation - GOL 0.0.1 documentation</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Code Documentation" href="modules.html" /><link rel="prev" title="GOL documentation" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Study Process Documentation - GOL 1.0.4 documentation</title><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Code Documentation" href="modules.html" /><link rel="prev" title="GOL documentation" href="index.html" />
       <link rel="canonical" href="https://carolinafaccin.github.io/gol/study_process.html" /><script>
     function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
     setColorMode(localStorage._theme||"auto");
@@ -81,6 +81,8 @@ data-aria-dark="Switch to auto color mode">
 <li><a class="reference internal" href="#v-1-0-2-performance-optimization-with-scipy-signal-convolve2d">V.1.0.2 - Performance Optimization with <cite>scipy.signal.convolve2d</cite></a></li>
 <li><a class="reference internal" href="#v-1-0-3-parameter-inputs-and-error-handling">V.1.0.3 - Parameter Inputs and Error Handling</a></li>
 <li><a class="reference internal" href="#v-1-0-4-adding-a-visual-progress-bar">V.1.0.4 - Adding a Visual Progress Bar</a></li>
+<li><a class="reference internal" href="#v1-0-5-making-rules-configurable">v1.0.5 - Making Rules Configurable</a></li>
+<li><a class="reference internal" href="#v1-0-6-decoupling-game-logic-and-visualization">v1.0.6 - Decoupling Game Logic and Visualization</a></li>
 </ul>
 </div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
   </aside>
@@ -194,6 +196,36 @@ Each entry details a specific change, the reasoning behind it, and the result.</
 <ul class="simple">
 <li><p><strong>Progress Bar:</strong> The <cite>tqdm</cite> library was integrated to add a dynamic progress bar to the frame generation loop. This simple change provides a clear visual indicator of the simulation’s status, showing the percentage completed and the estimated time remaining, a significant improvement over simple print statements.</p></li>
 </ul>
+<p>—</p>
+</section>
+<section id="v1-0-5-making-rules-configurable">
+<h2>v1.0.5 - Making Rules Configurable<a class="headerlink" href="#v1-0-5-making-rules-configurable" title="Link to this heading">¶</a></h2>
+<p>This version introduces a significant improvement in the code’s flexibility by making the simulation rules dynamic rather than hardcoded. This allows the same code to run different types of cellular automata without manual modification.</p>
+<p>Key changes from V.1.0.4:</p>
+<ul class="simple">
+<li><p><strong>Configurable Rules:</strong> The <cite>__init__</cite> method of the <cite>Game</cite> class was updated to accept <cite>survival_rules</cite> and <cite>birth_rules</cite> as parameters. These lists of integers define the number of neighbors a cell needs to survive or be born, respectively.</p></li>
+<li><p><strong>Vectorized Rule Application:</strong> The <cite>update</cite> method now uses the NumPy function <cite>np.isin()</cite> to check if a cell’s neighbor count is included in the provided rule lists. This vectorized approach replaces the static conditional checks with a flexible, data-driven method, maintaining the high performance achieved in previous versions.</p></li>
+<li><p><strong>Extensibility:</strong> This change allows for easy experimentation with different rule sets, such as the standard B3/S23 (Conway’s) rules or other well-known variations like HighLife (B36/S23) or Day &amp; Night (B3678/S34678), simply by changing the parameters passed to the <cite>Game</cite> class.</p></li>
+</ul>
+<p>—</p>
+</section>
+<section id="v1-0-6-decoupling-game-logic-and-visualization">
+<h2>v1.0.6 - Decoupling Game Logic and Visualization<a class="headerlink" href="#v1-0-6-decoupling-game-logic-and-visualization" title="Link to this heading">¶</a></h2>
+<p>This version represents a major architectural refactoring of the codebase. It separates the responsibilities of the simulation into distinct components, adhering to the principle of “separation of concerns”. This makes the code more modular, maintainable, and extensible, allowing for different types of output (e.g., GIFs, real-time animation) to be generated from the same core simulation.</p>
+<p>Key changes from V.1.0.5:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>Separation of Concerns:</strong> The code is now split into three distinct, single-purpose components:</dt><dd><ol class="arabic simple">
+<li><p><strong>`Game` Class:</strong> Solely responsible for the simulation logic, including the grid state and the <cite>update</cite> method. It no longer contains any visualization-related code.</p></li>
+<li><p><strong>`Renderer` Class:</strong> A new class created to handle all aspects of the visualization. It encapsulates Matplotlib-related code, such as creating the figure, applying the custom colormap, and generating a single frame from the game grid.</p></li>
+<li><p><strong>Visualization Functions:</strong> The large <cite>create_animation</cite> function was split into two new, focused functions: <cite>create_gif()</cite> and <cite>create_visualization()</cite>. The former generates and saves a GIF, while the latter runs a real-time, interactive visualization.</p></li>
+</ol>
+</dd>
+</dl>
+</li>
+<li><p><strong>Flexibility in Output:</strong> The script now offers the user a choice to either generate a GIF file or run a live, real-time visualization of the simulation. This is controlled by a simple user prompt in the main execution block.</p></li>
+<li><p><strong>Code Reusability:</strong> The new <cite>Renderer</cite> class can be reused across different projects or for generating different types of plots, demonstrating the benefits of a modular design. The <cite>Game</cite> class can also be easily imported and used in other contexts without any visualization dependencies.</p></li>
+</ul>
 </section>
 </section>
 
@@ -237,7 +269,7 @@ Each entry details a specific change, the reasoning behind it, and the result.</
     </div>
   </div>
 </footer>
-      <script src="_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="_static/documentation_options.js?v=71272d9f"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
       <script src="_static/shibuya.js?v=e730760c"></script></body>

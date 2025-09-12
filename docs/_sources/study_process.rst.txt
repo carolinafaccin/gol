@@ -93,3 +93,32 @@ This final version improves the user experience by providing real-time feedback 
 Key changes from V.1.0.3:
 
 * **Progress Bar:** The `tqdm` library was integrated to add a dynamic progress bar to the frame generation loop. This simple change provides a clear visual indicator of the simulation's status, showing the percentage completed and the estimated time remaining, a significant improvement over simple print statements.
+
+---
+
+v1.0.5 - Making Rules Configurable
+----------------------------------
+
+This version introduces a significant improvement in the code's flexibility by making the simulation rules dynamic rather than hardcoded. This allows the same code to run different types of cellular automata without manual modification.
+
+Key changes from V.1.0.4:
+
+* **Configurable Rules:** The `__init__` method of the `Game` class was updated to accept `survival_rules` and `birth_rules` as parameters. These lists of integers define the number of neighbors a cell needs to survive or be born, respectively.
+* **Vectorized Rule Application:** The `update` method now uses the NumPy function `np.isin()` to check if a cell's neighbor count is included in the provided rule lists. This vectorized approach replaces the static conditional checks with a flexible, data-driven method, maintaining the high performance achieved in previous versions.
+* **Extensibility:** This change allows for easy experimentation with different rule sets, such as the standard B3/S23 (Conway's) rules or other well-known variations like HighLife (B36/S23) or Day & Night (B3678/S34678), simply by changing the parameters passed to the `Game` class.
+
+---
+
+v1.0.6 - Decoupling Game Logic and Visualization
+-------------------------------------------------
+
+This version represents a major architectural refactoring of the codebase. It separates the responsibilities of the simulation into distinct components, adhering to the principle of "separation of concerns". This makes the code more modular, maintainable, and extensible, allowing for different types of output (e.g., GIFs, real-time animation) to be generated from the same core simulation.
+
+Key changes from V.1.0.5:
+
+* **Separation of Concerns:** The code is now split into three distinct, single-purpose components:
+    1.  **`Game` Class:** Solely responsible for the simulation logic, including the grid state and the `update` method. It no longer contains any visualization-related code.
+    2.  **`Renderer` Class:** A new class created to handle all aspects of the visualization. It encapsulates Matplotlib-related code, such as creating the figure, applying the custom colormap, and generating a single frame from the game grid.
+    3.  **Visualization Functions:** The large `create_animation` function was split into two new, focused functions: `create_gif()` and `create_visualization()`. The former generates and saves a GIF, while the latter runs a real-time, interactive visualization.
+* **Flexibility in Output:** The script now offers the user a choice to either generate a GIF file or run a live, real-time visualization of the simulation. This is controlled by a simple user prompt in the main execution block.
+* **Code Reusability:** The new `Renderer` class can be reused across different projects or for generating different types of plots, demonstrating the benefits of a modular design. The `Game` class can also be easily imported and used in other contexts without any visualization dependencies.
