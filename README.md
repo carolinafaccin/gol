@@ -44,6 +44,5 @@ gol/
 ├── docs/           # Final HTML output for GitHub Pages
 ├── examples/       # Scripts for different patterns
 ├── notebooks/      # Notebook with different patterns to run
-├── notebooks/      # Notebook with different patterns to run
 └── README.md       # This file
 ```
