@@ -1,3 +1,6 @@
+![](https://img.shields.io/badge/status-development-red.svg)
+![Top Language](https://img.shields.io/github/languages/top/carolinafaccin/gol)
+
 # GOL
 **GOL** - _Game of Life_ - is a coding project for hands-on practice with programming logic, data structures, and algorithms. 
 
@@ -22,18 +25,12 @@ Follow these generic steps:
 3) Clone the [latest release of this repository](https://github.com/carolinafaccin/gol.git) (download the asset zip folder);
 4) Extract the files to a folder of preference (ex: `C:\Users\Home\Documents\gol`);
 > **Warning**: do not change internal folder and file names.
-6) The main scripts are in the folder src/. Execute the file according to the pattern desired:
-  * Original Game of Life: `gol.py`
-  * Growing Heart: `growingheart.py`
-7) The script will print the progress of the simulation in the terminal. Upon completion, a new versioned .gif file will be saved in the figures/gif/tests/ directory.
+6) Execute the scripts in the notebook file `notebook/gol.ipynb`, choose the pattern desired and choose parameters.
+7) Each script will print the status bar of the simulation in the terminal. You can choose to generate a live animation or a new versioned .gif file will be saved in the `figures/gif/tests/` directory.
 
 ## Example outputs
 
-Example output from the `gol.py`script:
-
-_(in progress)_
-
-Example output from the `growingheart.py` script:
+Example output from the pattern `growing heart`:
 
 <img src="https://raw.githubusercontent.com/carolinafaccin/gol/main/figures/gif/growingheart_intro1.gif?raw=true" alt="Animated GIF of a growing heart pattern" width="350">
 
@@ -43,8 +40,10 @@ Example output from the `growingheart.py` script:
 gol/
 ├── src/            # Source code for the Game of Life
 ├── figures/        # Figures and animations generated
-├── sphinx_source/  # Source files for the documentation (.rst)
+├── source/         # Sphinx source files for the documentation (.rst)
 ├── docs/           # Final HTML output for GitHub Pages
-├── patterns/       # Scripts for different patterns
+├── examples/       # Scripts for different patterns
+├── notebooks/      # Notebook with different patterns to run
+├── notebooks/      # Notebook with different patterns to run
 └── README.md       # This file
 ```
