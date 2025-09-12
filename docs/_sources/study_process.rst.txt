@@ -18,7 +18,7 @@ This is the original implementation of the Game of Life as created by Santos (20
 ---
 
 
-V.0.0.1 - Refactoring with NumPy and Matplotlib
+V.0.1.0 - Refactoring with NumPy and Matplotlib
 -------------------------------------------------
 This version represents a significant refactoring of the original code. It moves from a console-based, ASCII visualization to a graphical one by adopting **NumPy** for matrix operations and **Matplotlib** for visualization. This change makes the code more efficient for large grids and provides a much richer visual output.
 
@@ -30,11 +30,11 @@ Key changes from V.0.0.0:
 
 ---
 
-V.0.0.2 - Custom Patterns and Rules
+V.0.2.0 - Custom Patterns and Rules
 -----------------------------------
 This version shifts the focus from a random initial grid to a predefined pattern: four heart shapes. To prevent these patterns from dying under the original rules, the simulation rules were modified to be more "generous" to promote continuous growth.
 
-Key changes from V.0.0.1:
+Key changes from V.0.2.0:
 
 * **Initial State:** The `__init__` method was completely changed to no longer generate a random grid based on a percentage of live cells. Instead, it creates a blank grid and places a predefined heart-shaped pattern in four quadrants.
 * **Survival Rules:** The `update` method was modified. The condition for a live cell to survive was expanded from `(alive_n == 2 or alive_n == 3)` to `(alive_n == 2 or alive_n == 3 or alive_n == 4)`. This change allows the patterns to survive and grow without being killed off by overpopulation.
@@ -45,7 +45,7 @@ V.1.0.0 - A Single, Growing Heart
 ---------------------------------
 This version simplifies the simulation to focus on a single, centrally located growing heart. It removes the previous four-heart pattern, making the simulation cleaner and easier to follow. The code was also translated to English and documented with clear docstrings.
 
-Key changes from V.0.0.2:
+Key changes from V.0.2.0:
 
 * **Pattern Placement:** The `__init__` method was simplified to place only a **single heart pattern** in the center of the grid, rather than four.
 * **Code Documentation:** All comments and variable names were translated from Portuguese to English. Comprehensive docstrings were added to the `Game` class and its methods, improving code readability and maintainability.
@@ -53,7 +53,7 @@ Key changes from V.0.0.2:
 
 ---
 
-V.1.0.1 - Improved Visualization and Code Structure
+V.1.1.0 - Improved Visualization and Code Structure
 -------------------------------------------------
 This version enhances the visualization and further improves code structure. It introduces a custom color map for the cells and adds more detailed comments to the visualization section.
 
@@ -64,44 +64,44 @@ Key changes from V.1.0.0:
 
 ---
 
-V.1.0.2 - Performance Optimization with `scipy.signal.convolve2d`
+V.1.2.0 - Performance Optimization with `scipy.signal.convolve2d`
 -----------------------------------------------------------------
 This version addresses a major performance bottleneck: the use of nested loops for updating the grid. It introduces a vectorized, highly efficient approach using a 2D convolution from the **SciPy** library.
 
-Key changes from V.1.0.1:
+Key changes from V.1.1.0:
 
 * **Vectorized Update Logic:** The `update` method was completely rewritten. It no longer uses nested `for` loops. Instead, it leverages `scipy.signal.convolve2d` to count all neighbors for the entire grid in a single, fast operation.
 * **Efficient GIF Creation:** The animation logic was improved to use `imageio.get_writer`. This change eliminates the need to store all frames in memory before saving the GIF, making it possible to generate very long or large animations without running out of RAM.
 
 ---
 
-V.1.0.3 - Parameter Inputs and Error Handling
+V.1.3.0 - Parameter Inputs and Error Handling
 ---------------------------------------------
 This version makes the script more user-friendly and flexible by allowing the user to specify the simulation parameters.
 
-Key changes from V.1.0.2:
+Key changes from V.1.2.0:
 
 * **User Input:** The `if __name__ == '__main__':` block was modified to prompt the user to enter the `matrix_size` and `total_steps` at runtime using the `input()` function.
 * **Robustness:** A `try-except` block was added to handle cases where the user enters non-integer input. The program now catches `ValueError` and provides a graceful exit or uses default values, preventing crashes.
 
 ---
 
-V.1.0.4 - Adding a Visual Progress Bar
+V.1.4.0 - Adding a Visual Progress Bar
 --------------------------------------
 This final version improves the user experience by providing real-time feedback on the simulation's progress.
 
-Key changes from V.1.0.3:
+Key changes from V.1.3.0:
 
 * **Progress Bar:** The `tqdm` library was integrated to add a dynamic progress bar to the frame generation loop. This simple change provides a clear visual indicator of the simulation's status, showing the percentage completed and the estimated time remaining, a significant improvement over simple print statements.
 
 ---
 
-v1.0.5 - Making Rules Configurable
+v1.5.0 - Making Rules Configurable
 ----------------------------------
 
 This version introduces a significant improvement in the code's flexibility by making the simulation rules dynamic rather than hardcoded. This allows the same code to run different types of cellular automata without manual modification.
 
-Key changes from V.1.0.4:
+Key changes from V.1.4.0:
 
 * **Configurable Rules:** The `__init__` method of the `Game` class was updated to accept `survival_rules` and `birth_rules` as parameters. These lists of integers define the number of neighbors a cell needs to survive or be born, respectively.
 * **Vectorized Rule Application:** The `update` method now uses the NumPy function `np.isin()` to check if a cell's neighbor count is included in the provided rule lists. This vectorized approach replaces the static conditional checks with a flexible, data-driven method, maintaining the high performance achieved in previous versions.
@@ -109,12 +109,12 @@ Key changes from V.1.0.4:
 
 ---
 
-v1.0.6 - Decoupling Game Logic and Visualization
+v1.6.0 - Decoupling Game Logic and Visualization
 -------------------------------------------------
 
 This version represents a major architectural refactoring of the codebase. It separates the responsibilities of the simulation into distinct components, adhering to the principle of "separation of concerns". This makes the code more modular, maintainable, and extensible, allowing for different types of output (e.g., GIFs, real-time animation) to be generated from the same core simulation.
 
-Key changes from V.1.0.5:
+Key changes from V.1.5.0:
 
 * **Separation of Concerns:** The code is now split into three distinct, single-purpose components:
     1.  **`Game` Class:** Solely responsible for the simulation logic, including the grid state and the `update` method. It no longer contains any visualization-related code.
@@ -122,3 +122,16 @@ Key changes from V.1.0.5:
     3.  **Visualization Functions:** The large `create_animation` function was split into two new, focused functions: `create_gif()` and `create_visualization()`. The former generates and saves a GIF, while the latter runs a real-time, interactive visualization.
 * **Flexibility in Output:** The script now offers the user a choice to either generate a GIF file or run a live, real-time visualization of the simulation. This is controlled by a simple user prompt in the main execution block.
 * **Code Reusability:** The new `Renderer` class can be reused across different projects or for generating different types of plots, demonstrating the benefits of a modular design. The `Game` class can also be easily imported and used in other contexts without any visualization dependencies.
+
+---
+
+v1.7.0 - Configurable Initial State
+-----------------------------------
+
+This version enhances user control and simulation flexibility by allowing the user to choose the initial state of the grid. This introduces the ability to explore how different starting conditions evolve under the same set of rules.
+
+Key changes from V.1.6.0:
+
+* **Configurable Initial State:** The `__init__` method of the `Game` class was updated to accept a new `initial_state` parameter. This parameter determines the grid's starting pattern.
+* **User Input:** A new prompt was added to the main script (`if __name__ == '__main__':`) asking the user to choose between starting with a "heart" pattern or a "random" grid. This choice is then passed to the `Game` class during initialization.
+* **New Starting Pattern:** The `__init__` method now includes logic to generate a randomized grid using `numpy.random.randint()` when the user selects the "random" option. This provides a new mode of simulation beyond the fixed heart pattern, encouraging more varied and unpredictable outcomes.

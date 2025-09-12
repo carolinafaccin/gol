@@ -1,21 +1,5 @@
 """
-A simulation of Conway's Game of Life with custom growth rules.
-
-This script implements a variation of Conway's Game of Life that starts
-with a single heart-shaped pattern. The rules are modified to favor
-continuous growth, preventing cells from dying.
-
-
-Under traditional rules, the cells forming the heart would diminish
-due to the rules of loneliness (a live cell with fewer than 2 neighbors dies)
-and overpopulation (a live cell with more than 3 neighbors dies).
-
-To make the heart "grow", the rules needed to be made more "generous",
-allowing cells to survive with more neighbors and thus expand.
-
-To change this rule, the 'update' method within the 'Game' class was adjusted.
-
-
+A simulation of Conway's Game of Life.
 
 The simulation is visualized using Matplotlib and saved as an animated,
 infinitely looping GIF.
@@ -43,17 +27,21 @@ class Game():
 
     def __init__(self, rows, columns, survival_rules=[2, 3, 4, 5], birth_rules=[3]) -> None:
         """
-        Initializes the Game of Life board with configurable rules.
+        Initializes the Game of Life board with configurable rules and a random initial state.
 
-        Sets up an empty grid of a given size and places a single, 
-        predefined heart-shaped pattern in the center.
+        Sets up an empty grid of a given size and populates it with live cells
+        at random positions.
 
         Args:
             rows (int): The number of rows for the simulation grid.
             columns (int): The number of columns for the simulation grid.
             survival_rules (list[int]): A list of neighbor counts for a live cell to survive.
             birth_rules (list[int]): A list of neighbor counts for a dead cell to be born.
-        
+            random_seed (int, optional): A seed for the random number generator to ensure reproducibility.
+                                          Defaults to None, which uses a random seed.
+            p_alive (float, optional): The probability (0.0 to 1.0) of a cell being alive at the start.
+                                       Defaults to 0.3.
+
         Attributes:
             rows (int): Stores the number of rows.
             columns (int): Stores the number of columns.
@@ -63,42 +51,70 @@ class Game():
             birth_rules (list[int]): Stores the birth rules.
         """
         
+    def __init__(self, rows, columns, survival_rules=[2, 3, 4, 5], birth_rules=[3], initial_state='heart') -> None:
+        """
+        Initializes the Game of Life board with configurable rules and a choice of initial state.
+
+        Args:
+            rows (int): The number of rows for the simulation grid.
+            columns (int): The number of columns for the simulation grid.
+            survival_rules (list[int]): A list of neighbor counts for a live cell to survive.
+            birth_rules (list[int]): A list of neighbor counts for a dead cell to be born.
+            initial_state (str): The starting pattern of the grid. Options are 'heart' or 'random'.
+        
+        Attributes:
+            # ... (attributes) ...
+            initial_state (str): Stores the initial state choice.
+        """
         self.rows = rows
         self.columns = columns
         self.survival_rules = survival_rules
         self.birth_rules = birth_rules
-        
-        # 1. Start with a completely empty grid (dtype=int is fine for 0s and 1s)
-        self.grid = np.zeros((rows, columns), dtype=int)
+        self.initial_state = initial_state
 
-        # 2. Define the heart pattern using 1 for "alive"
-        heart_pattern = np.array([
-            [0, 1, 1, 0, 1, 1, 0],
-            [1, 1, 1, 1, 1, 1, 1],
-            [1, 1, 1, 1, 1, 1, 1],
-            [0, 1, 1, 1, 1, 1, 0],
-            [0, 0, 1, 1, 1, 0, 0],
-            [0, 0, 0, 1, 0, 0, 0]
-        ], dtype=int)
+        # Initialize grid based on user's choice
+        if self.initial_state == 'heart':
+            # 1. Start with a completely empty grid
+            self.grid = np.zeros((rows, columns), dtype=int)
 
-        # Helper function to place a pattern at a given position
-        def place_pattern(grid, pattern, center_row, center_col):
-            pattern_height, pattern_width = pattern.shape
-            start_row = center_row - pattern_height // 2
-            start_col = center_col - pattern_width // 2
+            # 2. Define the heart pattern
+            heart_pattern = np.array([
+                [0, 1, 1, 0, 1, 1, 0],
+                [1, 1, 1, 1, 1, 1, 1],
+                [1, 1, 1, 1, 1, 1, 1],
+                [0, 1, 1, 1, 1, 1, 0],
+                [0, 0, 1, 1, 1, 0, 0],
+                [0, 0, 0, 1, 0, 0, 0]
+            ], dtype=int)
+
+            # Helper function to place a pattern at a given position
+            def place_pattern(grid, pattern, center_row, center_col):
+                pattern_height, pattern_width = pattern.shape
+                start_row = center_row - pattern_height // 2
+                start_col = center_col - pattern_width // 2
+                
+                # Ensures the pattern fits on the grid before placing it
+                if start_row >= 0 and start_col >= 0 and \
+                (start_row + pattern_height) <= grid.shape[0] and \
+                (start_col + pattern_width) <= grid.shape[1]:
+                    grid[start_row : start_row + pattern_height, start_col : start_col + pattern_width] = pattern
             
-            # Ensures the pattern fits on the grid before placing it
-            if start_row >= 0 and start_col >= 0 and \
-               (start_row + pattern_height) <= grid.shape[0] and \
-               (start_col + pattern_width) <= grid.shape[1]:
-                grid[start_row : start_row + pattern_height, start_col : start_col + pattern_width] = pattern
-        
-        # 3. Calculate the cent≤er of the grid
-        center_row = self.rows // 2
-        center_col = self.columns // 2
+            # 3. Calculate the cent≤er of the grid
+            center_row = self.rows // 2
+            center_col = self.columns // 2
 
-        # 4. Place the heart pattern in the center of the grid
-        place_pattern(self.grid, heart_pattern, center_row, center_col)
+            # 4. Place the heart pattern in the center of the grid
+            place_pattern(self.grid, heart_pattern, center_row, center_col)
+        
+        elif self.initial_state == 'random':
+            # Create a random grid with approximately 50% alive cells
+            self.grid = np.random.randint(0, 2, (rows, columns), dtype=int)
+        
+        else:
+            # Fallback to an empty grid if input is invalid
+            self.grid = np.zeros((rows, columns), dtype=int)
+            print("Warning: Invalid initial state. Starting with an empty grid.")
+
     
     def update(self) -> None:
         """
@@ -117,9 +133,12 @@ class Game():
         simply passing different lists during initialization.
 
         The core logic is as follows:
-        - A dead cell becomes alive if its neighbor count is in `self.birth_rules`.
-        - A live cell survives if its neighbor count is in `self.survival_rules`.
-        - All other cells die or remain dead.
+
+            - A dead cell becomes alive if its neighbor count is in `self.birth_rules`.
+
+            - A live cell survives if its neighbor count is in `self.survival_rules`.
+            
+            - All other cells die or remain dead.
         """
 
         # Define the 3x3 kernel for the 2D convolution.
@@ -261,18 +280,24 @@ if __name__ == '__main__':
         total_steps = 41
         print(f"Using default values: grid size = {matrix_size}, steps = {total_steps}")
     
+    # Prompt the user for the initial state
+    initial_state_choice = input("Enter 'heart' to start with the heart shape or 'random' for a randomized grid: ").lower()
+    
     # Define the rules and renderer
     current_survival_rules = [2, 3, 4, 5]
     current_birth_rules = [3]
     cell_colors = ["white", "#f77877"]
 
-    # Create the Game instance
-    game_instance = Game(matrix_size, matrix_size, survival_rules=current_survival_rules, birth_rules=current_birth_rules)
-    
+    # Create the Game instance, passing the user's choice
+    game_instance = Game(matrix_size, matrix_size, 
+                         survival_rules=current_survival_rules, 
+                         birth_rules=current_birth_rules, 
+                         initial_state=initial_state_choice)
+
     # Create the Renderer instance
     renderer_instance = Renderer(cell_colors=cell_colors)
-    
-    # --- GET USER'S CHOICE (BEFORE THE GIF LOGIC) ---
+
+    # --- GET USER'S CHOICE for output (gif or live) ---
     choice = input("Enter 'gif' to create an animated GIF or 'live' for real-time visualization: ").lower()
 
     if choice == 'gif':

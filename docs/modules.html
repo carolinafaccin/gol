@@ -118,21 +118,12 @@ data-aria-dark="Switch to auto color mode">
 <p>This section provides the auto-generated API documentation for all modules in the project.</p>
 <section id="module-gol">
 <span id="gol"></span><h2>gol<a class="headerlink" href="#module-gol" title="Link to this heading">¶</a></h2>
-<p>A simulation of Conway’s Game of Life with custom growth rules.</p>
-<p>This script implements a variation of Conway’s Game of Life that starts
-with a single heart-shaped pattern. The rules are modified to favor
-continuous growth, preventing cells from dying.</p>
-<p>Under traditional rules, the cells forming the heart would diminish
-due to the rules of loneliness (a live cell with fewer than 2 neighbors dies)
-and overpopulation (a live cell with more than 3 neighbors dies).</p>
-<p>To make the heart “grow”, the rules needed to be made more “generous”,
-allowing cells to survive with more neighbors and thus expand.</p>
-<p>To change this rule, the ‘update’ method within the ‘Game’ class was adjusted.</p>
+<p>A simulation of Conway’s Game of Life.</p>
 <p>The simulation is visualized using Matplotlib and saved as an animated,
 infinitely looping GIF.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="gol.Game">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gol.</span></span><span class="sig-name descname"><span class="pre">Game</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rows</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">survival_rules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[2,</span> <span class="pre">3,</span> <span class="pre">4,</span> <span class="pre">5]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">birth_rules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[3]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gol.html#Game"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gol.Game" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gol.</span></span><span class="sig-name descname"><span class="pre">Game</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rows</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">survival_rules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[2,</span> <span class="pre">3,</span> <span class="pre">4,</span> <span class="pre">5]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">birth_rules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[3]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'heart'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gol.html#Game"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gol.Game" title="Link to this definition">¶</a></dt>
 <dd><p>Manages the state and rules of a Game of Life simulation.</p>
 <p>This class holds the grid of cells and provides the mechanism to
 advance the simulation to the next generation.</p>
@@ -150,10 +141,14 @@ significantly more performant, especially for larger grids. The use of
 configurable rules allows the same code to simulate different “universes”
 or rule sets (e.g., standard Conway’s Life, HighLife, Day &amp; Night) by
 simply passing different lists during initialization.</p>
-<p>The core logic is as follows:
-- A dead cell becomes alive if its neighbor count is in <cite>self.birth_rules</cite>.
-- A live cell survives if its neighbor count is in <cite>self.survival_rules</cite>.
-- All other cells die or remain dead.</p>
+<p>The core logic is as follows:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>A dead cell becomes alive if its neighbor count is in <cite>self.birth_rules</cite>.</p></li>
+<li><p>A live cell survives if its neighbor count is in <cite>self.survival_rules</cite>.</p></li>
+<li><p>All other cells die or remain dead.</p></li>
+</ul>
+</div></blockquote>
 </dd></dl>
 
 </dd></dl>

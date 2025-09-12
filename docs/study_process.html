@@ -74,15 +74,16 @@ data-aria-dark="Switch to auto color mode">
     </button>
     <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
 <li><a class="reference internal" href="#v-0-0-0-initial-prototype-based-on-santos-2023">V.0.0.0 - Initial Prototype based on Santos (2023)</a></li>
-<li><a class="reference internal" href="#v-0-0-1-refactoring-with-numpy-and-matplotlib">V.0.0.1 - Refactoring with NumPy and Matplotlib</a></li>
-<li><a class="reference internal" href="#v-0-0-2-custom-patterns-and-rules">V.0.0.2 - Custom Patterns and Rules</a></li>
+<li><a class="reference internal" href="#v-0-1-0-refactoring-with-numpy-and-matplotlib">V.0.1.0 - Refactoring with NumPy and Matplotlib</a></li>
+<li><a class="reference internal" href="#v-0-2-0-custom-patterns-and-rules">V.0.2.0 - Custom Patterns and Rules</a></li>
 <li><a class="reference internal" href="#v-1-0-0-a-single-growing-heart">V.1.0.0 - A Single, Growing Heart</a></li>
-<li><a class="reference internal" href="#v-1-0-1-improved-visualization-and-code-structure">V.1.0.1 - Improved Visualization and Code Structure</a></li>
-<li><a class="reference internal" href="#v-1-0-2-performance-optimization-with-scipy-signal-convolve2d">V.1.0.2 - Performance Optimization with <cite>scipy.signal.convolve2d</cite></a></li>
-<li><a class="reference internal" href="#v-1-0-3-parameter-inputs-and-error-handling">V.1.0.3 - Parameter Inputs and Error Handling</a></li>
-<li><a class="reference internal" href="#v-1-0-4-adding-a-visual-progress-bar">V.1.0.4 - Adding a Visual Progress Bar</a></li>
-<li><a class="reference internal" href="#v1-0-5-making-rules-configurable">v1.0.5 - Making Rules Configurable</a></li>
-<li><a class="reference internal" href="#v1-0-6-decoupling-game-logic-and-visualization">v1.0.6 - Decoupling Game Logic and Visualization</a></li>
+<li><a class="reference internal" href="#v-1-1-0-improved-visualization-and-code-structure">V.1.1.0 - Improved Visualization and Code Structure</a></li>
+<li><a class="reference internal" href="#v-1-2-0-performance-optimization-with-scipy-signal-convolve2d">V.1.2.0 - Performance Optimization with <cite>scipy.signal.convolve2d</cite></a></li>
+<li><a class="reference internal" href="#v-1-3-0-parameter-inputs-and-error-handling">V.1.3.0 - Parameter Inputs and Error Handling</a></li>
+<li><a class="reference internal" href="#v-1-4-0-adding-a-visual-progress-bar">V.1.4.0 - Adding a Visual Progress Bar</a></li>
+<li><a class="reference internal" href="#v1-5-0-making-rules-configurable">v1.5.0 - Making Rules Configurable</a></li>
+<li><a class="reference internal" href="#v1-6-0-decoupling-game-logic-and-visualization">v1.6.0 - Decoupling Game Logic and Visualization</a></li>
+<li><a class="reference internal" href="#v1-7-0-configurable-initial-state">v1.7.0 - Configurable Initial State</a></li>
 </ul>
 </div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
   </aside>
@@ -127,8 +128,8 @@ Each entry details a specific change, the reasoning behind it, and the result.</
 </ul>
 <p>—</p>
 </section>
-<section id="v-0-0-1-refactoring-with-numpy-and-matplotlib">
-<h2>V.0.0.1 - Refactoring with NumPy and Matplotlib<a class="headerlink" href="#v-0-0-1-refactoring-with-numpy-and-matplotlib" title="Link to this heading">¶</a></h2>
+<section id="v-0-1-0-refactoring-with-numpy-and-matplotlib">
+<h2>V.0.1.0 - Refactoring with NumPy and Matplotlib<a class="headerlink" href="#v-0-1-0-refactoring-with-numpy-and-matplotlib" title="Link to this heading">¶</a></h2>
 <p>This version represents a significant refactoring of the original code. It moves from a console-based, ASCII visualization to a graphical one by adopting <strong>NumPy</strong> for matrix operations and <strong>Matplotlib</strong> for visualization. This change makes the code more efficient for large grids and provides a much richer visual output.</p>
 <p>Key changes from V.0.0.0:</p>
 <ul class="simple">
@@ -138,10 +139,10 @@ Each entry details a specific change, the reasoning behind it, and the result.</
 </ul>
 <p>—</p>
 </section>
-<section id="v-0-0-2-custom-patterns-and-rules">
-<h2>V.0.0.2 - Custom Patterns and Rules<a class="headerlink" href="#v-0-0-2-custom-patterns-and-rules" title="Link to this heading">¶</a></h2>
+<section id="v-0-2-0-custom-patterns-and-rules">
+<h2>V.0.2.0 - Custom Patterns and Rules<a class="headerlink" href="#v-0-2-0-custom-patterns-and-rules" title="Link to this heading">¶</a></h2>
 <p>This version shifts the focus from a random initial grid to a predefined pattern: four heart shapes. To prevent these patterns from dying under the original rules, the simulation rules were modified to be more “generous” to promote continuous growth.</p>
-<p>Key changes from V.0.0.1:</p>
+<p>Key changes from V.0.2.0:</p>
 <ul class="simple">
 <li><p><strong>Initial State:</strong> The <cite>__init__</cite> method was completely changed to no longer generate a random grid based on a percentage of live cells. Instead, it creates a blank grid and places a predefined heart-shaped pattern in four quadrants.</p></li>
 <li><p><strong>Survival Rules:</strong> The <cite>update</cite> method was modified. The condition for a live cell to survive was expanded from <cite>(alive_n == 2 or alive_n == 3)</cite> to <cite>(alive_n == 2 or alive_n == 3 or alive_n == 4)</cite>. This change allows the patterns to survive and grow without being killed off by overpopulation.</p></li>
@@ -151,7 +152,7 @@ Each entry details a specific change, the reasoning behind it, and the result.</
 <section id="v-1-0-0-a-single-growing-heart">
 <h2>V.1.0.0 - A Single, Growing Heart<a class="headerlink" href="#v-1-0-0-a-single-growing-heart" title="Link to this heading">¶</a></h2>
 <p>This version simplifies the simulation to focus on a single, centrally located growing heart. It removes the previous four-heart pattern, making the simulation cleaner and easier to follow. The code was also translated to English and documented with clear docstrings.</p>
-<p>Key changes from V.0.0.2:</p>
+<p>Key changes from V.0.2.0:</p>
 <ul class="simple">
 <li><p><strong>Pattern Placement:</strong> The <cite>__init__</cite> method was simplified to place only a <strong>single heart pattern</strong> in the center of the grid, rather than four.</p></li>
 <li><p><strong>Code Documentation:</strong> All comments and variable names were translated from Portuguese to English. Comprehensive docstrings were added to the <cite>Game</cite> class and its methods, improving code readability and maintainability.</p></li>
@@ -159,8 +160,8 @@ Each entry details a specific change, the reasoning behind it, and the result.</
 </ul>
 <p>—</p>
 </section>
-<section id="v-1-0-1-improved-visualization-and-code-structure">
-<h2>V.1.0.1 - Improved Visualization and Code Structure<a class="headerlink" href="#v-1-0-1-improved-visualization-and-code-structure" title="Link to this heading">¶</a></h2>
+<section id="v-1-1-0-improved-visualization-and-code-structure">
+<h2>V.1.1.0 - Improved Visualization and Code Structure<a class="headerlink" href="#v-1-1-0-improved-visualization-and-code-structure" title="Link to this heading">¶</a></h2>
 <p>This version enhances the visualization and further improves code structure. It introduces a custom color map for the cells and adds more detailed comments to the visualization section.</p>
 <p>Key changes from V.1.0.0:</p>
 <ul class="simple">
@@ -169,39 +170,39 @@ Each entry details a specific change, the reasoning behind it, and the result.</
 </ul>
 <p>—</p>
 </section>
-<section id="v-1-0-2-performance-optimization-with-scipy-signal-convolve2d">
-<h2>V.1.0.2 - Performance Optimization with <cite>scipy.signal.convolve2d</cite><a class="headerlink" href="#v-1-0-2-performance-optimization-with-scipy-signal-convolve2d" title="Link to this heading">¶</a></h2>
+<section id="v-1-2-0-performance-optimization-with-scipy-signal-convolve2d">
+<h2>V.1.2.0 - Performance Optimization with <cite>scipy.signal.convolve2d</cite><a class="headerlink" href="#v-1-2-0-performance-optimization-with-scipy-signal-convolve2d" title="Link to this heading">¶</a></h2>
 <p>This version addresses a major performance bottleneck: the use of nested loops for updating the grid. It introduces a vectorized, highly efficient approach using a 2D convolution from the <strong>SciPy</strong> library.</p>
-<p>Key changes from V.1.0.1:</p>
+<p>Key changes from V.1.1.0:</p>
 <ul class="simple">
 <li><p><strong>Vectorized Update Logic:</strong> The <cite>update</cite> method was completely rewritten. It no longer uses nested <cite>for</cite> loops. Instead, it leverages <cite>scipy.signal.convolve2d</cite> to count all neighbors for the entire grid in a single, fast operation.</p></li>
 <li><p><strong>Efficient GIF Creation:</strong> The animation logic was improved to use <cite>imageio.get_writer</cite>. This change eliminates the need to store all frames in memory before saving the GIF, making it possible to generate very long or large animations without running out of RAM.</p></li>
 </ul>
 <p>—</p>
 </section>
-<section id="v-1-0-3-parameter-inputs-and-error-handling">
-<h2>V.1.0.3 - Parameter Inputs and Error Handling<a class="headerlink" href="#v-1-0-3-parameter-inputs-and-error-handling" title="Link to this heading">¶</a></h2>
+<section id="v-1-3-0-parameter-inputs-and-error-handling">
+<h2>V.1.3.0 - Parameter Inputs and Error Handling<a class="headerlink" href="#v-1-3-0-parameter-inputs-and-error-handling" title="Link to this heading">¶</a></h2>
 <p>This version makes the script more user-friendly and flexible by allowing the user to specify the simulation parameters.</p>
-<p>Key changes from V.1.0.2:</p>
+<p>Key changes from V.1.2.0:</p>
 <ul class="simple">
 <li><p><strong>User Input:</strong> The <cite>if __name__ == ‘__main__’:</cite> block was modified to prompt the user to enter the <cite>matrix_size</cite> and <cite>total_steps</cite> at runtime using the <cite>input()</cite> function.</p></li>
 <li><p><strong>Robustness:</strong> A <cite>try-except</cite> block was added to handle cases where the user enters non-integer input. The program now catches <cite>ValueError</cite> and provides a graceful exit or uses default values, preventing crashes.</p></li>
 </ul>
 <p>—</p>
 </section>
-<section id="v-1-0-4-adding-a-visual-progress-bar">
-<h2>V.1.0.4 - Adding a Visual Progress Bar<a class="headerlink" href="#v-1-0-4-adding-a-visual-progress-bar" title="Link to this heading">¶</a></h2>
+<section id="v-1-4-0-adding-a-visual-progress-bar">
+<h2>V.1.4.0 - Adding a Visual Progress Bar<a class="headerlink" href="#v-1-4-0-adding-a-visual-progress-bar" title="Link to this heading">¶</a></h2>
 <p>This final version improves the user experience by providing real-time feedback on the simulation’s progress.</p>
-<p>Key changes from V.1.0.3:</p>
+<p>Key changes from V.1.3.0:</p>
 <ul class="simple">
 <li><p><strong>Progress Bar:</strong> The <cite>tqdm</cite> library was integrated to add a dynamic progress bar to the frame generation loop. This simple change provides a clear visual indicator of the simulation’s status, showing the percentage completed and the estimated time remaining, a significant improvement over simple print statements.</p></li>
 </ul>
 <p>—</p>
 </section>
-<section id="v1-0-5-making-rules-configurable">
-<h2>v1.0.5 - Making Rules Configurable<a class="headerlink" href="#v1-0-5-making-rules-configurable" title="Link to this heading">¶</a></h2>
+<section id="v1-5-0-making-rules-configurable">
+<h2>v1.5.0 - Making Rules Configurable<a class="headerlink" href="#v1-5-0-making-rules-configurable" title="Link to this heading">¶</a></h2>
 <p>This version introduces a significant improvement in the code’s flexibility by making the simulation rules dynamic rather than hardcoded. This allows the same code to run different types of cellular automata without manual modification.</p>
-<p>Key changes from V.1.0.4:</p>
+<p>Key changes from V.1.4.0:</p>
 <ul class="simple">
 <li><p><strong>Configurable Rules:</strong> The <cite>__init__</cite> method of the <cite>Game</cite> class was updated to accept <cite>survival_rules</cite> and <cite>birth_rules</cite> as parameters. These lists of integers define the number of neighbors a cell needs to survive or be born, respectively.</p></li>
 <li><p><strong>Vectorized Rule Application:</strong> The <cite>update</cite> method now uses the NumPy function <cite>np.isin()</cite> to check if a cell’s neighbor count is included in the provided rule lists. This vectorized approach replaces the static conditional checks with a flexible, data-driven method, maintaining the high performance achieved in previous versions.</p></li>
@@ -209,10 +210,10 @@ Each entry details a specific change, the reasoning behind it, and the result.</
 </ul>
 <p>—</p>
 </section>
-<section id="v1-0-6-decoupling-game-logic-and-visualization">
-<h2>v1.0.6 - Decoupling Game Logic and Visualization<a class="headerlink" href="#v1-0-6-decoupling-game-logic-and-visualization" title="Link to this heading">¶</a></h2>
+<section id="v1-6-0-decoupling-game-logic-and-visualization">
+<h2>v1.6.0 - Decoupling Game Logic and Visualization<a class="headerlink" href="#v1-6-0-decoupling-game-logic-and-visualization" title="Link to this heading">¶</a></h2>
 <p>This version represents a major architectural refactoring of the codebase. It separates the responsibilities of the simulation into distinct components, adhering to the principle of “separation of concerns”. This makes the code more modular, maintainable, and extensible, allowing for different types of output (e.g., GIFs, real-time animation) to be generated from the same core simulation.</p>
-<p>Key changes from V.1.0.5:</p>
+<p>Key changes from V.1.5.0:</p>
 <ul class="simple">
 <li><dl class="simple">
 <dt><strong>Separation of Concerns:</strong> The code is now split into three distinct, single-purpose components:</dt><dd><ol class="arabic simple">
@@ -225,6 +226,17 @@ Each entry details a specific change, the reasoning behind it, and the result.</
 </li>
 <li><p><strong>Flexibility in Output:</strong> The script now offers the user a choice to either generate a GIF file or run a live, real-time visualization of the simulation. This is controlled by a simple user prompt in the main execution block.</p></li>
 <li><p><strong>Code Reusability:</strong> The new <cite>Renderer</cite> class can be reused across different projects or for generating different types of plots, demonstrating the benefits of a modular design. The <cite>Game</cite> class can also be easily imported and used in other contexts without any visualization dependencies.</p></li>
+</ul>
+<p>—</p>
+</section>
+<section id="v1-7-0-configurable-initial-state">
+<h2>v1.7.0 - Configurable Initial State<a class="headerlink" href="#v1-7-0-configurable-initial-state" title="Link to this heading">¶</a></h2>
+<p>This version enhances user control and simulation flexibility by allowing the user to choose the initial state of the grid. This introduces the ability to explore how different starting conditions evolve under the same set of rules.</p>
+<p>Key changes from V.1.6.0:</p>
+<ul class="simple">
+<li><p><strong>Configurable Initial State:</strong> The <cite>__init__</cite> method of the <cite>Game</cite> class was updated to accept a new <cite>initial_state</cite> parameter. This parameter determines the grid’s starting pattern.</p></li>
+<li><p><strong>User Input:</strong> A new prompt was added to the main script (<cite>if __name__ == ‘__main__’:</cite>) asking the user to choose between starting with a “heart” pattern or a “random” grid. This choice is then passed to the <cite>Game</cite> class during initialization.</p></li>
+<li><p><strong>New Starting Pattern:</strong> The <cite>__init__</cite> method now includes logic to generate a randomized grid using <cite>numpy.random.randint()</cite> when the user selects the “random” option. This provides a new mode of simulation beyond the fixed heart pattern, encouraging more varied and unpredictable outcomes.</p></li>
 </ul>
 </section>
 </section>
