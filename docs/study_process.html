@@ -84,6 +84,8 @@ data-aria-dark="Switch to auto color mode">
 <li><a class="reference internal" href="#v1-5-0-making-rules-configurable">v1.5.0 - Making Rules Configurable</a></li>
 <li><a class="reference internal" href="#v1-6-0-decoupling-game-logic-and-visualization">v1.6.0 - Decoupling Game Logic and Visualization</a></li>
 <li><a class="reference internal" href="#v1-7-0-configurable-initial-state">v1.7.0 - Configurable Initial State</a></li>
+<li><a class="reference internal" href="#v1-8-0-streamlined-user-interface-and-codebase">v1.8.0 - Streamlined User Interface and Codebase</a></li>
+<li><a class="reference internal" href="#v2-0-0-enhanced-visual-fidelity">v2.0.0 - Enhanced Visual Fidelity</a></li>
 </ul>
 </div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
   </aside>
@@ -238,9 +240,10 @@ Each entry details a specific change, the reasoning behind it, and the result.</
 <li><p><strong>User Input:</strong> A new prompt was added to the main script (<cite>if __name__ == ‘__main__’:</cite>) asking the user to choose between starting with a “heart” pattern or a “random” grid. This choice is then passed to the <cite>Game</cite> class during initialization.</p></li>
 <li><p><strong>New Starting Pattern:</strong> The <cite>__init__</cite> method now includes logic to generate a randomized grid using <cite>numpy.random.randint()</cite> when the user selects the “random” option. This provides a new mode of simulation beyond the fixed heart pattern, encouraging more varied and unpredictable outcomes.</p></li>
 </ul>
-<p>—
-v1.8.0 - Streamlined User Interface and Codebase
-————————————————-</p>
+<p>—</p>
+</section>
+<section id="v1-8-0-streamlined-user-interface-and-codebase">
+<h2>v1.8.0 - Streamlined User Interface and Codebase<a class="headerlink" href="#v1-8-0-streamlined-user-interface-and-codebase" title="Link to this heading">¶</a></h2>
 <p>This version refines the codebase by removing a specific pattern from the core script and simplifying the user interface. This makes the <cite>gol.py</cite> file a more generic and reusable library, while centralizing specific pattern definitions in the notebook.</p>
 <p>Key changes from V.1.7.0:</p>
 <ul class="simple">
@@ -248,9 +251,10 @@ v1.8.0 - Streamlined User Interface and Codebase
 <li><p><strong>Simplified User Experience:</strong> The main script (<cite>if __name__ == ‘__main__’:</cite>) now defaults to a randomized grid, eliminating the need for the user to select an initial pattern. This makes the script more focused on providing a standard, ready-to-run simulation.</p></li>
 <li><p><strong>Pattern-Library Separation:</strong> The “growing heart” pattern, along with other famous patterns, is now defined and instantiated directly within the <cite>gol.ipynb</cite> notebook. This clearly separates the simulation <strong>library</strong> (<cite>gol.py</cite>) from the <strong>examples</strong> that use it, a best practice in software engineering.</p></li>
 </ul>
-<p>—
-v2.0.0 - Enhanced Visual Fidelity
-———————————–</p>
+<p>—</p>
+</section>
+<section id="v2-0-0-enhanced-visual-fidelity">
+<h2>v2.0.0 - Enhanced Visual Fidelity<a class="headerlink" href="#v2-0-0-enhanced-visual-fidelity" title="Link to this heading">¶</a></h2>
 <p>This version focuses on improving the visual quality of the generated GIFs, ensuring a cleaner and more professional aesthetic. The primary goal was to correct uneven borders that appeared around the simulation grid in the output images.</p>
 <p>Key changes from V.1.8.0:</p>
 <ul class="simple">

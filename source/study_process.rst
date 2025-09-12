@@ -137,6 +137,7 @@ Key changes from V.1.6.0:
 * **New Starting Pattern:** The `__init__` method now includes logic to generate a randomized grid using `numpy.random.randint()` when the user selects the "random" option. This provides a new mode of simulation beyond the fixed heart pattern, encouraging more varied and unpredictable outcomes.
 
 ---
+
 v1.8.0 - Streamlined User Interface and Codebase
 -------------------------------------------------
 
@@ -149,6 +150,7 @@ Key changes from V.1.7.0:
 * **Pattern-Library Separation:** The "growing heart" pattern, along with other famous patterns, is now defined and instantiated directly within the `gol.ipynb` notebook. This clearly separates the simulation **library** (`gol.py`) from the **examples** that use it, a best practice in software engineering.
 
 ---
+
 v2.0.0 - Enhanced Visual Fidelity
 -----------------------------------
 
