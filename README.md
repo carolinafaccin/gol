@@ -1,5 +1,4 @@
 ![](https://img.shields.io/badge/status-development-red.svg)
-![Top Language](https://img.shields.io/github/languages/top/carolinafaccin/gol)
 
 # GOL
 **GOL** - _Game of Life_ - is a coding project for hands-on practice with programming logic, data structures, and algorithms. 
@@ -21,7 +20,9 @@ Follow these generic steps:
 2) Install the following Python dependencies:
    * `numpy`;
    * `matplotlib`;
-   * `imageio`.
+   * `imageio`;
+   * `scipy`;
+   * `tqdm`.
 3) Clone the [latest release of this repository](https://github.com/carolinafaccin/gol.git) (download the asset zip folder);
 4) Extract the files to a folder of preference (ex: `C:\Users\Home\Documents\gol`);
 > **Warning**: do not change internal folder and file names.
