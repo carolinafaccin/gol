@@ -28,8 +28,7 @@ Follow these steps to get started:
    * `scipy`
    * `tqdm`
 3) Clone the [latest release of this repository](https://github.com/carolinafaccin/gol.git).
-4) Extract the files to a folder of your choice (e.g., `C:\Users\Home\Documents\gol`).
-> **Warning**: Do not change internal folder or file names.
+4) Extract the files to a folder of your choice (e.g., `C:\Users\Home\Documents\gol`). Do not change internal folder or file names.
 5) You can choose one of two options to run the project:
    * **a. Run `src/gol.py`:**
      * Set the matrix size and number of steps parameters on the inputs.
