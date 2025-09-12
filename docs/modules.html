@@ -74,10 +74,7 @@ data-aria-dark="Switch to auto color mode">
     </button>
     <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
 <li><a class="reference internal" href="#module-gol">gol</a><ul>
-<li><a class="reference internal" href="#gol.Game"><code class="docutils literal notranslate"><span class="pre">Game</span></code></a><ul>
-<li><a class="reference internal" href="#gol.Game.update"><code class="docutils literal notranslate">update()</span></code></a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#gol.Game"><code class="docutils literal notranslate"><span class="pre">Game</span></code></a></li>
 <li><a class="reference internal" href="#gol.Renderer"><code class="docutils literal notranslate"><span class="pre">Renderer</span></code></a></li>
 <li><a class="reference internal" href="#gol.create_gif"><code class="docutils literal notranslate"><span class="pre">create_gif()</span></code></a></li>
 <li><a class="reference internal" href="#gol.create_visualization"><code class="docutils literal notranslate"><span class="pre">create_visualization()</span></code></a></li>
@@ -119,43 +116,19 @@ data-aria-dark="Switch to auto color mode">
 <section id="module-gol">
 <span id="gol"></span><h2>gol<a class="headerlink" href="#module-gol" title="Link to this heading">¶</a></h2>
 <p>A simulation of Conway’s Game of Life.</p>
-<p>The simulation is visualized using Matplotlib and saved as an animated,
-infinitely looping GIF.</p>
+<p>This script provides a clean, modular, and extensible framework
+for simulating Conway’s Game of Life and its variations.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="gol.Game">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gol.</span></span><span class="sig-name descname"><span class="pre">Game</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rows</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">survival_rules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[2,</span> <span class="pre">3,</span> <span class="pre">4,</span> <span class="pre">5]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">birth_rules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[3]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'heart'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gol.html#Game"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gol.Game" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gol.</span></span><span class="sig-name descname"><span class="pre">Game</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rows</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">survival_rules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[2,</span> <span class="pre">3]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">birth_rules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[3]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_pattern</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gol.html#Game"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gol.Game" title="Link to this definition">¶</a></dt>
 <dd><p>Manages the state and rules of a Game of Life simulation.</p>
 <p>This class holds the grid of cells and provides the mechanism to
-advance the simulation to the next generation.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="gol.Game.update">
-<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/gol.html#Game.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gol.Game.update" title="Link to this definition">¶</a></dt>
-<dd><p>Advances the simulation by one generation according to configurable rules.</p>
-<p>This method calculates the number of live neighbors for each cell on the
-grid using a highly optimized 2D convolution from the SciPy library. It
-then applies the rules defined in the <cite>survival_rules</cite> and <cite>birth_rules</cite>
-attributes of the class to the entire grid using efficient vectorized
-NumPy operations.</p>
-<p>This approach replaces the slower nested for-loops, making the simulation
-significantly more performant, especially for larger grids. The use of
-configurable rules allows the same code to simulate different “universes”
-or rule sets (e.g., standard Conway’s Life, HighLife, Day &amp; Night) by
-simply passing different lists during initialization.</p>
-<p>The core logic is as follows:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>A dead cell becomes alive if its neighbor count is in <cite>self.birth_rules</cite>.</p></li>
-<li><p>A live cell survives if its neighbor count is in <cite>self.survival_rules</cite>.</p></li>
-<li><p>All other cells die or remain dead.</p></li>
-</ul>
-</div></blockquote>
-</dd></dl>
-
+advance the simulation to the next generation based on configurable rules.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="gol.Renderer">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gol.</span></span><span class="sig-name descname"><span class="pre">Renderer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell_colors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(3.5,</span> <span class="pre">3.5)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">110</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gol.html#Renderer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gol.Renderer" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gol.</span></span><span class="sig-name descname"><span class="pre">Renderer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell_colors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">6)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">160</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gol.html#Renderer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gol.Renderer" title="Link to this definition">¶</a></dt>
 <dd><p>The Renderer class encapsulates all the visualization logic.
 It receives style parameters and is responsible for generating images (frames).</p>
 <p>Handles the visualization of the Game of Life grid using Matplotlib.</p>

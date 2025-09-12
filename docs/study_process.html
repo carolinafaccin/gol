@@ -238,6 +238,25 @@ Each entry details a specific change, the reasoning behind it, and the result.</
 <li><p><strong>User Input:</strong> A new prompt was added to the main script (<cite>if __name__ == ‘__main__’:</cite>) asking the user to choose between starting with a “heart” pattern or a “random” grid. This choice is then passed to the <cite>Game</cite> class during initialization.</p></li>
 <li><p><strong>New Starting Pattern:</strong> The <cite>__init__</cite> method now includes logic to generate a randomized grid using <cite>numpy.random.randint()</cite> when the user selects the “random” option. This provides a new mode of simulation beyond the fixed heart pattern, encouraging more varied and unpredictable outcomes.</p></li>
 </ul>
+<p>—
+v1.8.0 - Streamlined User Interface and Codebase
+————————————————-</p>
+<p>This version refines the codebase by removing a specific pattern from the core script and simplifying the user interface. This makes the <cite>gol.py</cite> file a more generic and reusable library, while centralizing specific pattern definitions in the notebook.</p>
+<p>Key changes from V.1.7.0:</p>
+<ul class="simple">
+<li><p><strong>Codebase Consolidation:</strong> The <cite>Game</cite> class was simplified by removing the hardcoded “heart” pattern. The <cite>__init__</cite> method now accepts only a specific <cite>initial_pattern</cite> or defaults to an empty grid if none is provided.</p></li>
+<li><p><strong>Simplified User Experience:</strong> The main script (<cite>if __name__ == ‘__main__’:</cite>) now defaults to a randomized grid, eliminating the need for the user to select an initial pattern. This makes the script more focused on providing a standard, ready-to-run simulation.</p></li>
+<li><p><strong>Pattern-Library Separation:</strong> The “growing heart” pattern, along with other famous patterns, is now defined and instantiated directly within the <cite>gol.ipynb</cite> notebook. This clearly separates the simulation <strong>library</strong> (<cite>gol.py</cite>) from the <strong>examples</strong> that use it, a best practice in software engineering.</p></li>
+</ul>
+<p>—
+v2.0.0 - Enhanced Visual Fidelity
+———————————–</p>
+<p>This version focuses on improving the visual quality of the generated GIFs, ensuring a cleaner and more professional aesthetic. The primary goal was to correct uneven borders that appeared around the simulation grid in the output images.</p>
+<p>Key changes from V.1.8.0:</p>
+<ul class="simple">
+<li><p><strong>Visual Consistency:</strong> The <cite>Renderer</cite> class was modified to ensure consistent and symmetrical borders on all four sides of the generated plots. This was achieved by adjusting the <cite>plt.tight_layout</cite> <cite>pad</cite> parameter to <cite>0.2</cite>.</p></li>
+<li><p><strong>Increased Resolution:</strong> The default <cite>figsize</cite> and <cite>dpi</cite> (dots per inch) were increased from <cite>(3.5, 3.5)</cite> to <cite>(6, 6)</cite> and from <cite>110</cite> to <cite>160</cite>, respectively. This change produces higher-resolution GIF frames, resulting in sharper, more detailed animations.</p></li>
+</ul>
 </section>
 </section>
 

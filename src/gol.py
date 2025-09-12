@@ -1,8 +1,9 @@
 """
 A simulation of Conway's Game of Life.
 
-The simulation is visualized using Matplotlib and saved as an animated,
-infinitely looping GIF.
+This script provides a clean, modular, and extensible framework
+for simulating Conway's Game of Life and its variations.
+
 """
 
 
@@ -22,25 +23,22 @@ class Game():
     Manages the state and rules of a Game of Life simulation.
 
     This class holds the grid of cells and provides the mechanism to
-    advance the simulation to the next generation.
+    advance the simulation to the next generation based on configurable rules.
     """
 
-    def __init__(self, rows, columns, survival_rules=[2, 3, 4, 5], birth_rules=[3]) -> None:
+    def __init__(self, rows, columns, survival_rules=[2, 3], birth_rules=[3], initial_pattern=None) -> None:
         """
-        Initializes the Game of Life board with configurable rules and a random initial state.
-
-        Sets up an empty grid of a given size and populates it with live cells
-        at random positions.
+        Initializes the Game of Life board with a specified initial pattern.
 
         Args:
             rows (int): The number of rows for the simulation grid.
             columns (int): The number of columns for the simulation grid.
             survival_rules (list[int]): A list of neighbor counts for a live cell to survive.
+                                        Defaults to standard B3/S23 rules.
             birth_rules (list[int]): A list of neighbor counts for a dead cell to be born.
-            random_seed (int, optional): A seed for the random number generator to ensure reproducibility.
-                                          Defaults to None, which uses a random seed.
-            p_alive (float, optional): The probability (0.0 to 1.0) of a cell being alive at the start.
-                                       Defaults to 0.3.
+                                     Defaults to standard B3/S23 rules.
+            initial_pattern (np.ndarray, optional): A custom pattern to place on the grid.
+                                                    Defaults to None, which creates an empty grid.
 
         Attributes:
             rows (int): Stores the number of rows.
@@ -50,26 +48,14 @@ class Game():
             survival_rules (list[int]): Stores the survival rules.
             birth_rules (list[int]): Stores the birth rules.
         """
-        
-    def __init__(self, rows, columns, survival_rules=[2, 3], birth_rules=[3], initial_state='random', initial_pattern=None) -> None:
-        """
-        Initializes the Game of Life board with a choice of initial state.
 
-        Args:
-            rows (int): The number of rows for the simulation grid.
-            columns (int): The number of columns for the simulation grid.
-            survival_rules (list[int]): A list of neighbor counts for a live cell to survive.
-            birth_rules (list[int]): A list of neighbor counts for a dead cell to be born.
-            initial_state (str): The type of starting pattern ('heart' or 'random'). This is
-                                 ignored if initial_pattern is provided.
-            initial_pattern (np.ndarray, optional): A custom pattern to place on the grid.
-                                                    Defaults to None.
-        """
+
         self.rows = rows
         self.columns = columns
         self.survival_rules = survival_rules
         self.birth_rules = birth_rules
-        self.initial_state = initial_state
+
+        # Initialize the grid
         self.grid = np.zeros((rows, columns), dtype=int)
 
         # Helper function to place a pattern at a given position
@@ -83,97 +69,29 @@ class Game():
                (start_col + pattern_width) <= grid.shape[1]:
                 grid[start_row : start_row + pattern_height, start_col : start_col + pattern_width] = pattern
 
-        # Prioritize custom pattern if provided
+        # Place the pattern if one is provided
         if initial_pattern is not None:
             center_row = self.rows // 2
             center_col = self.columns // 2
             place_pattern(self.grid, initial_pattern, center_row, center_col)
-        
-        # Otherwise, use the previous logic
-        elif self.initial_state == 'heart':
-            # 1. Start with a completely empty grid
-            self.grid = np.zeros((rows, columns), dtype=int)
-
-            # 2. Define the heart pattern
-            heart_pattern = np.array([
-                [0, 1, 1, 0, 1, 1, 0],
-                [1, 1, 1, 1, 1, 1, 1],
-                [1, 1, 1, 1, 1, 1, 1],
-                [0, 1, 1, 1, 1, 1, 0],
-                [0, 0, 1, 1, 1, 0, 0],
-                [0, 0, 0, 1, 0, 0, 0]
-            ], dtype=int)
-
-            # Helper function to place a pattern at a given position
-            def place_pattern(grid, pattern, center_row, center_col):
-                pattern_height, pattern_width = pattern.shape
-                start_row = center_row - pattern_height // 2
-                start_col = center_col - pattern_width // 2
-                
-                # Ensures the pattern fits on the grid before placing it
-                if start_row >= 0 and start_col >= 0 and \
-                (start_row + pattern_height) <= grid.shape[0] and \
-                (start_col + pattern_width) <= grid.shape[1]:
-                    grid[start_row : start_row + pattern_height, start_col : start_col + pattern_width] = pattern
-            
-            # 3. Calculate the cent≤er of the grid
-            center_row = self.rows // 2
-            center_col = self.columns // 2
-
-            # 4. Place the heart pattern in the center of the grid
-            place_pattern(self.grid, heart_pattern, center_row, center_col)
-        
-        elif self.initial_state == 'random':
-            # Create a random grid with approximately 50% alive cells
-            self.grid = np.random.randint(0, 2, (rows, columns), dtype=int)
-        
-        else:
-            # Fallback to an empty grid if input is invalid
-            self.grid = np.zeros((rows, columns), dtype=int)
-            print("Warning: Invalid initial state. Starting with an empty grid.")
-
     
+
     def update(self) -> None:
-        """
-        Advances the simulation by one generation according to configurable rules.
-
-        This method calculates the number of live neighbors for each cell on the
-        grid using a highly optimized 2D convolution from the SciPy library. It
-        then applies the rules defined in the `survival_rules` and `birth_rules`
-        attributes of the class to the entire grid using efficient vectorized
-        NumPy operations.
-
-        This approach replaces the slower nested for-loops, making the simulation
-        significantly more performant, especially for larger grids. The use of
-        configurable rules allows the same code to simulate different "universes"
-        or rule sets (e.g., standard Conway's Life, HighLife, Day & Night) by
-        simply passing different lists during initialization.
-
-        The core logic is as follows:
-
-            - A dead cell becomes alive if its neighbor count is in `self.birth_rules`.
-
-            - A live cell survives if its neighbor count is in `self.survival_rules`.
-            
-            - All other cells die or remain dead.
-        """
-
-        # Define the 3x3 kernel for the 2D convolution.
+        # ... (update method is the same) ...
         kernel = np.array([[1, 1, 1],
-                        [1, 0, 1],
-                        [1, 1, 1]])
+                           [1, 0, 1],
+                           [1, 1, 1]])
 
-        # Apply 2D convolution to count live neighbors for every cell at once.
+
         total_neighbors = scipy.signal.convolve2d(self.grid, kernel, mode="same", boundary="wrap")
-
-        # Create the new grid based on the rules using vectorized operations.
+        
         new_grid = np.zeros_like(self.grid)
 
-        # Survival Rule: A live cell survives if its neighbor count is in the survival_rules list.
+
         survival_mask = (self.grid == 1) & (np.isin(total_neighbors, self.survival_rules))
         new_grid[survival_mask] = 1
 
-        # Birth Rule: A dead cell is born if its neighbor count is in the birth_rules list.
+
         birth_mask = (self.grid == 0) & (np.isin(total_neighbors, self.birth_rules))
         new_grid[birth_mask] = 1
 
@@ -190,7 +108,7 @@ class Renderer():
     Handles the visualization of the Game of Life grid using Matplotlib.
     """
 
-    def __init__(self, cell_colors, figsize=(3.5, 3.5), dpi=110):
+    def __init__(self, cell_colors, figsize=(6, 6), dpi=160):
         """
         Initializes the renderer with specific visualization parameters.
 
@@ -212,7 +130,8 @@ class Renderer():
         ax.set_xticks([])
         ax.set_yticks([])
 
-        plt.tight_layout(pad=0)
+        plt.tight_layout(pad=0.2)
+        
         fig.canvas.draw()
 
         # Pega dimensões corretas pelo renderer (funciona no Mac)
@@ -297,19 +216,21 @@ if __name__ == '__main__':
         total_steps = 41
         print(f"Using default values: grid size = {matrix_size}, steps = {total_steps}")
     
-    # Prompt the user for the initial state
-    initial_state_choice = input("Enter 'heart' to start with the heart shape or 'random' for a randomized grid: ").lower()
+    # --- DEFAULT TO A RANDOM INITIAL PATTERN ---
+    # The random pattern is now the standard initial state, without asking the user.
+    initial_pattern = np.random.randint(0, 2, (matrix_size, matrix_size), dtype=int)
     
     # Define the rules and renderer
-    current_survival_rules = [2, 3, 4, 5]
+    current_survival_rules = [2, 3]
     current_birth_rules = [3]
     cell_colors = ["white", "#f77877"]
 
-    # Create the Game instance, passing the user's choice
+    # Create the Game instance with the prepared pattern
+    # The 'initial_state' argument is no longer needed in Game.__init__()
     game_instance = Game(matrix_size, matrix_size, 
                          survival_rules=current_survival_rules, 
                          birth_rules=current_birth_rules, 
-                         initial_state=initial_state_choice)
+                         initial_pattern=initial_pattern)
 
     # Create the Renderer instance
     renderer_instance = Renderer(cell_colors=cell_colors)
@@ -325,7 +246,7 @@ if __name__ == '__main__':
         os.makedirs(output_dir, exist_ok=True)
         base_filename = os.path.splitext(os.path.basename(__file__))[0]
 
-        # Find the next available version number
+
         version = 1
         while True:
             version_str = f"v{version:03d}"
@@ -341,4 +262,4 @@ if __name__ == '__main__':
     elif choice == 'live':
         create_visualization(game_instance, renderer_instance, total_steps)
     else:
-        print("Invalid choice. Please run the script again and choose 'gif' or 'live'.")
+        print("Invalid choice. Please run the script again and choose a valid option.")

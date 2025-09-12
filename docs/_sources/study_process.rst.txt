@@ -9,7 +9,7 @@ Each entry details a specific change, the reasoning behind it, and the result.
 ---
 
 V.0.0.0 - Initial Prototype based on Santos (2023)
--------------------------------------------------
+--------------------------------------------------
 This is the original implementation of the Game of Life as created by Santos (2023). It uses standard Python lists and basic loops to simulate the game, printing the grid to the console with ASCII characters.
 
 * `Article on Medium <https://c137santos.medium.com/a-implementa%C3%A7%C3%A3o-do-game-of-life-em-python-3c2da1536957>`_
@@ -54,7 +54,7 @@ Key changes from V.0.2.0:
 ---
 
 V.1.1.0 - Improved Visualization and Code Structure
--------------------------------------------------
+---------------------------------------------------
 This version enhances the visualization and further improves code structure. It introduces a custom color map for the cells and adds more detailed comments to the visualization section.
 
 Key changes from V.1.0.0:
@@ -135,3 +135,26 @@ Key changes from V.1.6.0:
 * **Configurable Initial State:** The `__init__` method of the `Game` class was updated to accept a new `initial_state` parameter. This parameter determines the grid's starting pattern.
 * **User Input:** A new prompt was added to the main script (`if __name__ == '__main__':`) asking the user to choose between starting with a "heart" pattern or a "random" grid. This choice is then passed to the `Game` class during initialization.
 * **New Starting Pattern:** The `__init__` method now includes logic to generate a randomized grid using `numpy.random.randint()` when the user selects the "random" option. This provides a new mode of simulation beyond the fixed heart pattern, encouraging more varied and unpredictable outcomes.
+
+---
+v1.8.0 - Streamlined User Interface and Codebase
+-------------------------------------------------
+
+This version refines the codebase by removing a specific pattern from the core script and simplifying the user interface. This makes the `gol.py` file a more generic and reusable library, while centralizing specific pattern definitions in the notebook.
+
+Key changes from V.1.7.0:
+
+* **Codebase Consolidation:** The `Game` class was simplified by removing the hardcoded "heart" pattern. The `__init__` method now accepts only a specific `initial_pattern` or defaults to an empty grid if none is provided.
+* **Simplified User Experience:** The main script (`if __name__ == '__main__':`) now defaults to a randomized grid, eliminating the need for the user to select an initial pattern. This makes the script more focused on providing a standard, ready-to-run simulation.
+* **Pattern-Library Separation:** The "growing heart" pattern, along with other famous patterns, is now defined and instantiated directly within the `gol.ipynb` notebook. This clearly separates the simulation **library** (`gol.py`) from the **examples** that use it, a best practice in software engineering.
+
+---
+v2.0.0 - Enhanced Visual Fidelity
+-----------------------------------
+
+This version focuses on improving the visual quality of the generated GIFs, ensuring a cleaner and more professional aesthetic. The primary goal was to correct uneven borders that appeared around the simulation grid in the output images.
+
+Key changes from V.1.8.0:
+
+* **Visual Consistency:** The `Renderer` class was modified to ensure consistent and symmetrical borders on all four sides of the generated plots. This was achieved by adjusting the `plt.tight_layout` `pad` parameter to `0.2`.
+* **Increased Resolution:** The default `figsize` and `dpi` (dots per inch) were increased from `(3.5, 3.5)` to `(6, 6)` and from `110` to `160`, respectively. This change produces higher-resolution GIF frames, resulting in sharper, more detailed animations.
