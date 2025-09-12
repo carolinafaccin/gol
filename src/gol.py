@@ -51,29 +51,46 @@ class Game():
             birth_rules (list[int]): Stores the birth rules.
         """
         
-    def __init__(self, rows, columns, survival_rules=[2, 3, 4, 5], birth_rules=[3], initial_state='heart') -> None:
+    def __init__(self, rows, columns, survival_rules=[2, 3], birth_rules=[3], initial_state='random', initial_pattern=None) -> None:
         """
-        Initializes the Game of Life board with configurable rules and a choice of initial state.
+        Initializes the Game of Life board with a choice of initial state.
 
         Args:
             rows (int): The number of rows for the simulation grid.
             columns (int): The number of columns for the simulation grid.
             survival_rules (list[int]): A list of neighbor counts for a live cell to survive.
             birth_rules (list[int]): A list of neighbor counts for a dead cell to be born.
-            initial_state (str): The starting pattern of the grid. Options are 'heart' or 'random'.
-        
-        Attributes:
-            # ... (attributes) ...
-            initial_state (str): Stores the initial state choice.
+            initial_state (str): The type of starting pattern ('heart' or 'random'). This is
+                                 ignored if initial_pattern is provided.
+            initial_pattern (np.ndarray, optional): A custom pattern to place on the grid.
+                                                    Defaults to None.
         """
         self.rows = rows
         self.columns = columns
         self.survival_rules = survival_rules
         self.birth_rules = birth_rules
         self.initial_state = initial_state
+        self.grid = np.zeros((rows, columns), dtype=int)
 
-        # Initialize grid based on user's choice
-        if self.initial_state == 'heart':
+        # Helper function to place a pattern at a given position
+        def place_pattern(grid, pattern, center_row, center_col):
+            pattern_height, pattern_width = pattern.shape
+            start_row = center_row - pattern_height // 2
+            start_col = center_col - pattern_width // 2
+            
+            if start_row >= 0 and start_col >= 0 and \
+               (start_row + pattern_height) <= grid.shape[0] and \
+               (start_col + pattern_width) <= grid.shape[1]:
+                grid[start_row : start_row + pattern_height, start_col : start_col + pattern_width] = pattern
+
+        # Prioritize custom pattern if provided
+        if initial_pattern is not None:
+            center_row = self.rows // 2
+            center_col = self.columns // 2
+            place_pattern(self.grid, initial_pattern, center_row, center_col)
+        
+        # Otherwise, use the previous logic
+        elif self.initial_state == 'heart':
             # 1. Start with a completely empty grid
             self.grid = np.zeros((rows, columns), dtype=int)
 
