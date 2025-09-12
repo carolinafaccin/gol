@@ -1,7 +1,7 @@
 # GOL
-**GOL** - _Game of Life_ - is a coding project for hands-on practice with programming logic, data structures, and algorithms. 
+**GOL** - _Game of Life_ - is a project that aims to build a functional version of John Conway's classic cellular automaton, a system that simulates the evolution of cells based on a set of simple rules.
 
-The project aims to build a functional version of John Conway's classic cellular automaton, a system that simulates the evolution of cells based on a set of simple rules.
+This project serves as a foundational study for research into future urban dynamics, utilizing cellular automata and agent-based modeling. By implementing Conway's Game of Life, the goal was to explore the fundamental principles of how complex systems can emerge from simple rules.
 
 [![Documentation](https://img.shields.io/badge/docs-read%20the%20documentation-brightgreen)](https://carolinafaccin.github.io/gol/)
 
