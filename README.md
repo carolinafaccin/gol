@@ -1,3 +1,5 @@
+![Status](https://img.shields.io/badge/status-concluded-brightgreen.svg)
+
 # GOL
 **GOL** - _Game of Life_ - is a project that aims to build a functional version of John Conway's classic cellular automaton, a system that simulates the evolution of cells based on a set of simple rules.
 
@@ -5,7 +7,7 @@ This project serves as a foundational study for research into future urban dynam
 
 By implementing Conway's Game of Life, the goal was to explore the fundamental principles of how complex systems can emerge from simple rules.
 
-[![Documentation](https://img.shields.io/badge/docs-read%20the%20documentation-brightgreen)](https://carolinafaccin.github.io/gol/)
+[![Documentation](https://img.shields.io/badge/docs-read%20the%20documentation-blue)](https://carolinafaccin.github.io/gol/)
 
 ## Project Goals
 - Implement core logic: Develop the rules for a two-dimensional grid based on Conway's four rules.
